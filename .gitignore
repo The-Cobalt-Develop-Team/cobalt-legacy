@@ -7,3 +7,4 @@ Releases/
 bin/
 lib/
 .xmake/
+.vscode/
