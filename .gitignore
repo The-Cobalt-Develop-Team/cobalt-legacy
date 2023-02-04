@@ -6,3 +6,4 @@ Releases/
 .cache/
 bin/
 lib/
+.xmake/
