@@ -1,0 +1,8 @@
+build/
+test/
+Releases/
+*.a
+*.out
+.cache/
+bin/
+lib/
