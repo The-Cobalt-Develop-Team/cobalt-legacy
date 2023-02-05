@@ -6,5 +6,6 @@ Releases/
 .cache/
 bin/
 lib/
+temp/
 .xmake/
 .vscode/
