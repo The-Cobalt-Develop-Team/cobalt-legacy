@@ -19,17 +19,41 @@
 /*C Declarations*/
 #include "../include/tokens.h"
 #include "../include/errormsg.h"
-union {
-    int lval;
-    C_string sval;
-    double fval;
-} yylval;
-#define ADJ (EM_tokpos=charPos, charPos+=yyleng)
+/*#define ADJ (EM_tokpos=charPos, charPos+=yyleng)*/
+#define ADJ
 %}
 /*Lex Definitions*/
 digits [0-9]+
-%%
 /*Regular Expressions and Actions*/
+%%
+" " {
+    ADJ;
+    return EMPTY;
+}
+\n {
+    ADJ;
+    return EMPTY;
+}
+char {
+    ADJ;
+    return CHAR;
+}
+int {
+    ADJ;
+    return INT;
+}
+float {
+    return FLOAT;
+}
+double {
+    return DOUBLE;
+}
+short {
+    return SHORT;
+}
+long {
+    return LONG;
+}
 if {
     ADJ;
     return IF;
@@ -89,13 +113,154 @@ import {
     yylval.sval = C_String(yytext);
     return CH;
 }
+"\"".*"\"" {
+    ADJ;
+    yylval.sval = C_String(yytext);
+    return STRING;
+}
 "+" {
     ADJ;
     return ADD;
 }
-""
+"-" {
+    ADJ;
+    return SUB;
+}
+"*" {
+    ADJ;
+    return TIMES;
+}
+"/" {
+    ADJ;
+    return DIV;
+}
+"%" {
+    ADJ;
+    return MOD;
+}
+">=" {
+    ADJ;
+    return GEQ;
+}
+">" {
+    ADJ;
+    return GREATER;
+}
+"<=" {
+    ADJ;
+    return LEQ;
+}
+"<" {
+    ADJ;
+    return LESS;
+}
+"==" {
+    ADJ;
+    return EQUAL;
+}
+"!=" {
+    ADJ;
+    return NEQUAL;
+}
+"++" {
+    ADJ;
+    return INC;
+}
+"--" {
+    ADJ;
+    return DEC;
+}
+"+=" {
+    ADJ;
+    return ADDAGN;
+}
+"-=" {
+    ADJ;
+    return SUBAGN;
+}
+"*=" {
+    ADJ;
+    return TIMAGN;
+}
+"/=" {
+    ADJ;
+    return DIVAGN;
+}
+"%=" {
+    ADJ;
+    return MODAGN;
+}
+"<<=" {
+    ADJ;
+    return LSHAGN;
+}
+">>=" {
+    ADJ;
+    return RSHAGN;
+}
+"&=" {
+    ADJ;
+    return BANDAGN;
+}
+"^=" {
+    ADJ;
+    return BXORAGN;
+}
+"|=" {
+    ADJ;
+    return BORAGN;
+}
+"=" {
+    ADJ;
+    return AGN;
+}
+"?" {
+    ADJ;
+    return QUES;
+}
+"(" {
+    ADJ;
+    return LPAREN;
+}
+")" {
+    ADJ;
+    return RPAREN;
+}
+"[" {
+    ADJ;
+    return LBRACK;
+}
+"]" {
+    ADJ;
+    return RBRACK;
+}
+"{" {
+    ADJ;
+    return LBRACE;
+}
+"}" {
+    ADJ;
+    return RBRACE;
+}
+":" {
+    ADJ;
+    return COLON;
+}
+";" {
+    ADJ;
+    return SEMICOLON;
+}
+"," {
+    ADJ;
+    return COMMA;
+}
+"." {
+    ADJ;
+    return DOT;
+}
 [a-zA-Z][a-zA-Z0-9]* {
     ADJ;
     yylval.sval = C_String(yytext);
     return ID;
 }
+

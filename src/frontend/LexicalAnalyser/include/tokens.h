@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "../../Common/include/util.h"
+#include "util.h"
 enum TOKENS {
     /*Types*/
     CHAR,
@@ -40,6 +40,7 @@ enum TOKENS {
     NUM,
     REAL,
     CH,
+    STRING,
     /*Arithmetic Operators*/
     ADD,
     SUB,
@@ -47,10 +48,10 @@ enum TOKENS {
     DIV,
     MOD,
     /*Relational and Logical Operators*/
-    GREATER,
     GEQ,
-    LESS,
+    GREATER,
     LEQ,
+    LESS,
     EQUAL,
     NEQUAL,
     /*Increment and Decrement Operators*/
@@ -64,7 +65,6 @@ enum TOKENS {
     RSHIFT,
     COMPLE,
     /*Assignment Operators*/
-    AGN,
     ADDAGN,
     SUBAGN,
     TIMAGN,
@@ -75,9 +75,30 @@ enum TOKENS {
     BANDAGN,
     BXORAGN,
     BORAGN,
+    AGN,
     /*Conditional Expressions(Ternary Operator)*/
     QUES, /* "?" */
-    OTH, /* ":" */
+    /*Parentheses*/
+    LPAREN,
+    RPAREN,
+    LBRACK,
+    RBRACK,
+    LBRACE,
+    RBRACE,
+    /*Symbol*/
+    COLON,
+    SEMICOLON,
+    COMMA,
+    DOT,
     /*Other*/
+    EMPTY,
     ID
 };
+typedef union {
+    int pos;
+    int ival;
+    C_string sval;
+    double fval;
+} YYTYPE;
+
+extern YYTYPE yylval;
