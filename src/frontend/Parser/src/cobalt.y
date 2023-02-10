@@ -1,0 +1,23 @@
+%{
+#include <stdio.h>
+int yylex(void);
+int yywrap(void){}
+void yyerror(char *s){}
+%}
+%token CHAR INT FLOAT DOUBLE SHORT LONG 
+%token IF ELSE SWITCH CASE WHILE FOR DO BREAK CONTINUE GOTO IMPORT 
+%token NUM REAL CH STRING 
+%token ADD SUB TIMES DIV MOD 
+%token GEQ GREATER LEQ LESS EQUAL NEQUAL 
+%token INC DEC 
+%token BITAND BITOR BITXOR LSHIFT RSHIFT COMPLE 
+%token ADDAGN SUBAGN TIMAGN DIVAGN MODAGN LSHAGN RSHAGN BANDAGN BXORAGN BORAGN AGN 
+%token QUES  
+%token LPAREN RPAREN LBRACK RBRACK LBRACE RBRACE 
+%token COLON SEMICOLON COMMA DOT 
+%token EMPTY ID
+%start prog
+%%
+prog : stm
+stm : IMPORT ID SEMICOLON {printf("import identifier:%d",ID);}
+%%

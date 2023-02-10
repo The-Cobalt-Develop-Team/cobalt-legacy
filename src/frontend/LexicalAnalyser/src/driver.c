@@ -22,7 +22,7 @@ YYTYPE yylval;
 int yylex(void);
 
 C_string toknames[] = {
-    "CHAR", "INT", "FLOAT", "DOUBLE", "SHORT", "LONG", "IF",
+    "ERROR", "CHAR", "INT", "FLOAT", "DOUBLE", "SHORT", "LONG", "IF",
     "ELSE", "SWITCH", "CASE", "WHILE", "FOR", "DO", "BREAK",
     "CONTINUE", "GOTO", "IMPORT", "NUM", "REAL", "CH", "STRING", "ADD", "SUB", "TIMES", "DIV", "MOD",
     "GEQ", "GREATER", "LEQ", "LESS", "EQUAL", "NEQUAL", "INC", "DEC", "BITAND", "BITOR", "BITXOR", "LSHIFT", "RSHIFT",

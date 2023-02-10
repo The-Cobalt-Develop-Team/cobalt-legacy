@@ -18,6 +18,7 @@
 #include "util.h"
 enum TOKENS {
     /*Types*/
+    ERROR,
     CHAR,
     INT,
     FLOAT,
