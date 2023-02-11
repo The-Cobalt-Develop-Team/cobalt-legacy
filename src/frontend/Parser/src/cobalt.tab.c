@@ -70,11 +70,28 @@
 #line 1 "cobalt.y"
 
 #include <stdio.h>
-int yylex(void);
-int yywrap(void){}
-void yyerror(char *s){}
 
-#line 78 "cobalt.tab.c"
+extern int yylex(void);
+
+extern int yyparse(void);
+
+int yywrap()
+{
+    return 1;
+}
+
+void yyerror(const char *s)
+{
+    printf("[error] %s\n",s);
+}
+
+int main()
+{
+    yyparse();
+    return 0;
+}
+
+#line 95 "cobalt.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -170,8 +187,7 @@ enum yysymbol_kind_t
   YYSYMBOL_EMPTY = 65,                     /* EMPTY  */
   YYSYMBOL_ID = 66,                        /* ID  */
   YYSYMBOL_YYACCEPT = 67,                  /* $accept  */
-  YYSYMBOL_prog = 68,                      /* prog  */
-  YYSYMBOL_stm = 69                        /* stm  */
+  YYSYMBOL_stm = 68                        /* stm  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -497,18 +513,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  5
+#define YYFINAL  6
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   3
+#define YYLAST   46
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  67
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  3
+#define YYNNTS  2
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  3
+#define YYNRULES  4
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  7
+#define YYNSTATES  8
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   321
@@ -564,7 +580,7 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    21,    21,    22
+       0,    39,    39,    42,    45
 };
 #endif
 
@@ -588,8 +604,7 @@ static const char *const yytname[] =
   "LSHIFT", "RSHIFT", "COMPLE", "ADDAGN", "SUBAGN", "TIMAGN", "DIVAGN",
   "MODAGN", "LSHAGN", "RSHAGN", "BANDAGN", "BXORAGN", "BORAGN", "AGN",
   "QUES", "LPAREN", "RPAREN", "LBRACK", "RBRACK", "LBRACE", "RBRACE",
-  "COLON", "SEMICOLON", "COMMA", "DOT", "EMPTY", "ID", "$accept", "prog",
-  "stm", YY_NULLPTR
+  "COLON", "SEMICOLON", "COMMA", "DOT", "EMPTY", "ID", "$accept", "stm", YY_NULLPTR
 };
 
 static const char *
@@ -599,7 +614,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-66)
+#define YYPACT_NINF (-62)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -613,7 +628,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -19,   -65,     2,   -66,   -59,   -66,   -66
+     -19,   -61,   -62,     2,   -62,   -59,   -62,   -62
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -621,19 +636,19 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,     0,     2,     0,     1,     3
+       0,     0,     4,     0,     3,     0,     1,     2
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -66,   -66,   -66
+     -62,   -62
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2,     3
+       0,     3
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -641,31 +656,39 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       1,     4,     5,     6
+       1,     4,     6,     7,     0,     5,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     2
 };
 
 static const yytype_int8 yycheck[] =
 {
-      19,    66,     0,    62
+      19,    62,     0,    62,    -1,    66,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    65
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    19,    68,    69,    66,     0,    62
+       0,    19,    65,    68,    62,    66,     0,    62
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    67,    68,    69
+       0,    67,    68,    68,    68
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     3
+       0,     2,     3,     2,     1
 };
 
 
@@ -1128,14 +1151,32 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 3: /* stm: IMPORT ID SEMICOLON  */
-#line 22 "cobalt.y"
-                          {printf("import identifier:%d",ID);}
-#line 1135 "cobalt.tab.c"
+  case 2: /* stm: IMPORT ID SEMICOLON  */
+#line 39 "cobalt.y"
+                      {
+    printf("import identifier,%d\n",ID);
+}
+#line 1160 "cobalt.tab.c"
+    break;
+
+  case 3: /* stm: IMPORT SEMICOLON  */
+#line 42 "cobalt.y"
+                   {
+    printf("import identifier");
+}
+#line 1168 "cobalt.tab.c"
+    break;
+
+  case 4: /* stm: EMPTY  */
+#line 45 "cobalt.y"
+        {
+    printf("Nothing\n");
+}
+#line 1176 "cobalt.tab.c"
     break;
 
 
-#line 1139 "cobalt.tab.c"
+#line 1180 "cobalt.tab.c"
 
       default: break;
     }
@@ -1328,4 +1369,5 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 23 "cobalt.y"
+#line 48 "cobalt.y"
+

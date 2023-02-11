@@ -19,6 +19,7 @@
 /*C Declarations*/
 #include "../include/tokens.h"
 #include "../include/errormsg.h"
+#include "../../Parser/src/cobalt.tab.h"
 /*#define ADJ (EM_tokpos=charPos, charPos+=yyleng)*/
 #define ADJ
 %}

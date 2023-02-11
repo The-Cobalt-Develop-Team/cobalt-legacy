@@ -34,7 +34,7 @@ C_string toknames[] = {
 
 C_string tokname(int tok)
 {
-    return tok < CHAR || tok > ID ? "BAD_TOKEN" : toknames[tok];
+    return tok < CHAR || tok > ID ? "BAD_TOKEN" : toknames[tok - 257];
 }
 
 int main(int argc, char** argv)

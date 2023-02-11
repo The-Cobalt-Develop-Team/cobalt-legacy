@@ -19,7 +19,7 @@
 enum TOKENS {
     /*Types*/
     ERROR,
-    CHAR,
+    CHAR = 258,
     INT,
     FLOAT,
     DOUBLE,

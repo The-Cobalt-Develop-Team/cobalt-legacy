@@ -1,8 +1,25 @@
 %{
 #include <stdio.h>
-int yylex(void);
-int yywrap(void){}
-void yyerror(char *s){}
+
+extern int yylex(void);
+
+extern int yyparse(void);
+
+int yywrap()
+{
+    return 1;
+}
+
+void yyerror(const char *s)
+{
+    printf("[error] %s\n",s);
+}
+
+int main()
+{
+    yyparse();
+    return 0;
+}
 %}
 %token CHAR INT FLOAT DOUBLE SHORT LONG 
 %token IF ELSE SWITCH CASE WHILE FOR DO BREAK CONTINUE GOTO IMPORT 
@@ -16,8 +33,16 @@ void yyerror(char *s){}
 %token LPAREN RPAREN LBRACK RBRACK LBRACE RBRACE 
 %token COLON SEMICOLON COMMA DOT 
 %token EMPTY ID
-%start prog
+%start stm
 %%
-prog : stm
-stm : IMPORT ID SEMICOLON {printf("import identifier:%d",ID);}
+stm 
+: IMPORT ID SEMICOLON {
+    printf("import identifier,%d\n",ID);
+};
+| IMPORT SEMICOLON {
+    printf("import identifier\n");
+};
+| EMPTY {
+    printf("Nothing\n");
+};
 %%
