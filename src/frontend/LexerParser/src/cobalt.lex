@@ -30,23 +30,33 @@ digits [0-9]+
 %%
 char {
     ADJ;
-    return CHAR;
+    yylval.sval = C_String(yytext);
+    return BUILTINTYPE;
 }
 int {
     ADJ;
-    return INT;
+    yylval.sval = C_String(yytext);
+    return BUILTINTYPE;
 }
 float {
-    return FLOAT;
+    ADJ;
+    yylval.sval = C_String(yytext);
+    return BUILTINTYPE;
 }
 double {
-    return DOUBLE;
+    ADJ;
+    yylval.sval = C_String(yytext);
+    return BUILTINTYPE;
 }
 short {
-    return SHORT;
+    ADJ;
+    yylval.sval = C_String(yytext);
+    return BUILTINTYPE;
 }
 long {
-    return LONG;
+    ADJ;
+    yylval.sval = C_String(yytext);
+    return BUILTINTYPE;
 }
 if {
     ADJ;
