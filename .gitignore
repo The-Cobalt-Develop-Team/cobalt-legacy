@@ -8,4 +8,5 @@ lib/
 temp/
 .xmake/
 .vscode/
-lex.yy.c
+*.yy.c
+*.tab.c

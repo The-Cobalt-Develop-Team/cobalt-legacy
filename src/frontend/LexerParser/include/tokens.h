@@ -95,11 +95,12 @@ enum TOKENS {
     EMPTY,
     ID
 };
+
 typedef union {
     int pos;
     int ival;
     C_string sval;
     double fval;
-} YYTYPE;
+} YYSTYPE;
 
-extern YYTYPE yylval;
+extern YYSTYPE yylval;

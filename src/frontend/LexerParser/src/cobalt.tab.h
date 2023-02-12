@@ -71,60 +71,67 @@ extern int yydebug;
     CONTINUE = 272,                /* CONTINUE  */
     GOTO = 273,                    /* GOTO  */
     IMPORT = 274,                  /* IMPORT  */
-    NUM = 275,                     /* NUM  */
-    REAL = 276,                    /* REAL  */
-    CH = 277,                      /* CH  */
-    STRING = 278,                  /* STRING  */
-    ADD = 279,                     /* ADD  */
-    SUB = 280,                     /* SUB  */
-    TIMES = 281,                   /* TIMES  */
-    DIV = 282,                     /* DIV  */
-    MOD = 283,                     /* MOD  */
-    GEQ = 284,                     /* GEQ  */
-    GREATER = 285,                 /* GREATER  */
-    LEQ = 286,                     /* LEQ  */
-    LESS = 287,                    /* LESS  */
-    EQUAL = 288,                   /* EQUAL  */
-    NEQUAL = 289,                  /* NEQUAL  */
-    INC = 290,                     /* INC  */
-    DEC = 291,                     /* DEC  */
-    BITAND = 292,                  /* BITAND  */
-    BITOR = 293,                   /* BITOR  */
-    BITXOR = 294,                  /* BITXOR  */
-    LSHIFT = 295,                  /* LSHIFT  */
-    RSHIFT = 296,                  /* RSHIFT  */
-    COMPLE = 297,                  /* COMPLE  */
-    ADDAGN = 298,                  /* ADDAGN  */
-    SUBAGN = 299,                  /* SUBAGN  */
-    TIMAGN = 300,                  /* TIMAGN  */
-    DIVAGN = 301,                  /* DIVAGN  */
-    MODAGN = 302,                  /* MODAGN  */
-    LSHAGN = 303,                  /* LSHAGN  */
-    RSHAGN = 304,                  /* RSHAGN  */
-    BANDAGN = 305,                 /* BANDAGN  */
-    BXORAGN = 306,                 /* BXORAGN  */
-    BORAGN = 307,                  /* BORAGN  */
-    AGN = 308,                     /* AGN  */
-    QUES = 309,                    /* QUES  */
-    LPAREN = 310,                  /* LPAREN  */
-    RPAREN = 311,                  /* RPAREN  */
-    LBRACK = 312,                  /* LBRACK  */
-    RBRACK = 313,                  /* RBRACK  */
-    LBRACE = 314,                  /* LBRACE  */
-    RBRACE = 315,                  /* RBRACE  */
-    COLON = 316,                   /* COLON  */
-    SEMICOLON = 317,               /* SEMICOLON  */
-    COMMA = 318,                   /* COMMA  */
-    DOT = 319,                     /* DOT  */
-    EMPTY = 320,                   /* EMPTY  */
-    ID = 321                       /* ID  */
+    ADD = 275,                     /* ADD  */
+    SUB = 276,                     /* SUB  */
+    TIMES = 277,                   /* TIMES  */
+    DIV = 278,                     /* DIV  */
+    MOD = 279,                     /* MOD  */
+    GEQ = 280,                     /* GEQ  */
+    GREATER = 281,                 /* GREATER  */
+    LEQ = 282,                     /* LEQ  */
+    LESS = 283,                    /* LESS  */
+    EQUAL = 284,                   /* EQUAL  */
+    NEQUAL = 285,                  /* NEQUAL  */
+    INC = 286,                     /* INC  */
+    DEC = 287,                     /* DEC  */
+    BITAND = 288,                  /* BITAND  */
+    BITOR = 289,                   /* BITOR  */
+    BITXOR = 290,                  /* BITXOR  */
+    LSHIFT = 291,                  /* LSHIFT  */
+    RSHIFT = 292,                  /* RSHIFT  */
+    COMPLE = 293,                  /* COMPLE  */
+    ADDAGN = 294,                  /* ADDAGN  */
+    SUBAGN = 295,                  /* SUBAGN  */
+    TIMAGN = 296,                  /* TIMAGN  */
+    DIVAGN = 297,                  /* DIVAGN  */
+    MODAGN = 298,                  /* MODAGN  */
+    LSHAGN = 299,                  /* LSHAGN  */
+    RSHAGN = 300,                  /* RSHAGN  */
+    BANDAGN = 301,                 /* BANDAGN  */
+    BXORAGN = 302,                 /* BXORAGN  */
+    BORAGN = 303,                  /* BORAGN  */
+    AGN = 304,                     /* AGN  */
+    QUES = 305,                    /* QUES  */
+    LPAREN = 306,                  /* LPAREN  */
+    RPAREN = 307,                  /* RPAREN  */
+    LBRACK = 308,                  /* LBRACK  */
+    RBRACK = 309,                  /* RBRACK  */
+    LBRACE = 310,                  /* LBRACE  */
+    RBRACE = 311,                  /* RBRACE  */
+    COLON = 312,                   /* COLON  */
+    SEMICOLON = 313,               /* SEMICOLON  */
+    COMMA = 314,                   /* COMMA  */
+    DOT = 315,                     /* DOT  */
+    ID = 316,                      /* ID  */
+    NUM = 317,                     /* NUM  */
+    REAL = 318,                    /* REAL  */
+    CH = 319,                      /* CH  */
+    STRING = 320                   /* STRING  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 25 "cobalt.y"
+int ival; double fval; char cval; C_string sval;
+
+#line 132 "cobalt.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

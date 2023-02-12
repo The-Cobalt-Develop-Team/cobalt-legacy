@@ -17,9 +17,10 @@
 */
 %{
 /*C Declarations*/
-#include "../include/tokens.h"
+// #include "../include/tokens.h"
 #include "../include/errormsg.h"
-#include "../../Parser/src/cobalt.tab.h"
+#include "../include/util.h"
+#include "cobalt.tab.h"
 /*#define ADJ (EM_tokpos=charPos, charPos+=yyleng)*/
 #define ADJ
 %}
@@ -27,14 +28,6 @@
 digits [0-9]+
 /*Regular Expressions and Actions*/
 %%
-" " {
-    ADJ;
-    return EMPTY;
-}
-\n {
-    ADJ;
-    return EMPTY;
-}
 char {
     ADJ;
     return CHAR;
