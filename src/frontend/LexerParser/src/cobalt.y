@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include "../include/util.h"
 #include "../include/tree.h"
+// #include "../../SemanticAnalyser/AST/ASTCApi.h"
 
 extern int yylex(void);
 
@@ -64,7 +65,7 @@ stm
 | IMPORT ID {
     printf("import identifier,%s\n",$2);
 };
-| ID AGN exp {   // Assign a valuable
+| ID AGN exp {   /* Assign a valuable */
     printf("Identifier:%s, assign to %d\n",$1,$3);
 };
 | BUILTINTYPE ID AGN exp {
@@ -72,10 +73,87 @@ stm
 };
 
 exp
-: ID {
+: LPAREN exp LPAREN {
+    $$ = $2;
+}
+| ID {
     $$ = addIdentifier($1);
+    /* AST_AddressNodeConstructor() */
+}
+| NUM {
+    
+}
+| REAL {
+
+}
+| CH {
+
+}
+| STRING {
+    
 }
 | exp ADD exp {
     $$ = addAddOp($1,$3);
+    /* $$ = AST_BinaryOpNodeConstructor($1, AST_AddOp, $3) */
+}
+| exp SUB exp {
+
+}
+| exp TIMES exp {
+
+}
+| exp DIV exp {
+
+}
+| exp MOD exp {
+
+}
+| exp GEQ exp {
+
+}
+| exp GREATER exp {
+
+}
+| exp LEQ exp {
+
+}
+| exp LESS exp {
+
+}
+| exp EQUAL exp {
+
+}
+| exp NEQUAL exp {
+
+}
+| INC exp {
+
+}
+| DEC exp {
+
+}
+| exp INC {
+
+}
+| exp DEC {
+
+}
+| exp BITAND exp {
+
+}
+| exp BITOR exp {
+    
+}
+| exp BITXOR exp {
+    
+}
+| exp LSHIFT exp {
+    
+}
+| exp RSHIFT exp {
+    
+}
+| COMPLE exp {
+
 }
 %%
