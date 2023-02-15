@@ -25,12 +25,7 @@ int yylex(void);
 
 C_string toknames[] = {
     "YYUNDEF",
-    "CHAR",
-    "INT",
-    "FLOAT",
-    "DOUBLE",
-    "SHORT",
-    "LONG",
+    "BUILTINTYPE",
     "IF",
     "ELSE",
     "SWITCH",
@@ -92,7 +87,7 @@ C_string toknames[] = {
 
 C_string tokname(int tok)
 {
-    return tok < CHAR || tok > 400 ? "BAD_TOKEN" : toknames[tok - 257];
+    return tok < 1 || tok > 400 ? "BAD_TOKEN" : toknames[tok - 257];
 }
 
 int main(int argc, char** argv)
