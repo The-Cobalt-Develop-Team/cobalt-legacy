@@ -14,4 +14,12 @@ void* AST_BinaryOpNodeConstructor(void* lhs, AST_BinaryOperatorType op, void* rh
     auto new_node = new ASTBinaryOpNode(*lhs_, op, *rhs_);
     return static_cast<void*>(new_node);
 }
+
+void* AST_UnaryOpNodeConstructor(void* expr, AST_UnaryOperatorType op)
+{
+    using namespace Cobalt;
+    auto expr_ = static_cast<ASTExprNode*>(expr);
+    auto new_node = new ASTUnaryOpNode(*expr_, op);
+    return static_cast<void*>(new_node);
+}
 }

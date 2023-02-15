@@ -32,6 +32,9 @@ struct ASTBinaryOpNode : ASTExprNode {
     const Operator op;
 };
 
+struct ASTLogicalOrNode : ASTBinaryOpNode { };
+struct ASTLogicalAndNode : ASTBinaryOpNode { };
+
 struct ASTUnaryOpNode : ASTExprNode {
     using Operator = AST_UnaryOperatorType;
     [[nodiscard]] ASTNodeKind kind() const override { return NK_UnaryOp; }

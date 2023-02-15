@@ -35,7 +35,7 @@ void* AST_AddChildNode(void* parent, void* child);
  */
 void* AST_AssignNodeConstructor(void* lhs, void* rhs);
 
-enum AST_BinaryOperatorType {
+typedef enum {
     AST_AddOp,
     AST_SubOp,
     AST_TimesOp,
@@ -54,13 +54,13 @@ enum AST_BinaryOperatorType {
     AST_RShiftOp,
     AST_LogicalAndOp,
     AST_LogicalOrOp,
-};
+} AST_BinaryOperatorType;
 
-enum AST_UnaryOperatorType {
+typedef enum {
     AST_IncOp,
     AST_DecOp,
     AST_CompleOp,
-};
+} AST_UnaryOperatorType;
 
 // typedef const char* AST_BinaryOperatorType;
 
@@ -87,6 +87,8 @@ void* AST_AddressNodeConstructor(void* expr);
  * \param rhs right hand side
  */
 void* AST_BinaryOpNodeConstructor(void* lhs, AST_BinaryOperatorType op, void* rhs);
+
+void* AST_UnaryOpNodeCostructor(void* expr, AST_UnaryOperatorType op);
 
 /**
  * \brief Construct static cast node e.g. (int)(1.5)
