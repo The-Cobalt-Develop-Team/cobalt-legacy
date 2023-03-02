@@ -15,26 +15,79 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "../include/tokens.h"
+// #include "../include/tokens.h"
+#include "../include/util.h"
+#include "cobalt.tab.h"
 
-YYTYPE yylval;
+YYSTYPE yylval;
 
 int yylex(void);
 
 C_string toknames[] = {
-    "ERROR", "CHAR", "INT", "FLOAT", "DOUBLE", "SHORT", "LONG", "IF",
-    "ELSE", "SWITCH", "CASE", "WHILE", "FOR", "DO", "BREAK",
-    "CONTINUE", "GOTO", "IMPORT", "NUM", "REAL", "CH", "STRING", "ADD", "SUB", "TIMES", "DIV", "MOD",
-    "GEQ", "GREATER", "LEQ", "LESS", "EQUAL", "NEQUAL", "INC", "DEC", "BITAND", "BITOR", "BITXOR", "LSHIFT", "RSHIFT",
-    "COMPLE", "ADDAGN", "SUBAGN", "TIMAGN", "DIVAGN", "MODAGN", "LSHAGN", "RSHAGN",
-    "BANDAGN", "BXORAGN", "BORAGN", "AGN", "QUES", "LPAREN", "RPAREN", "LBRACK", "RBRACK",
-    "LBRACE", "RBRACE", "COLON", "SEMICOLON", "COMMA", "DOT", "EMPTY",
-    "ID"
+    "YYUNDEF",
+    "BUILTINTYPE",
+    "IF",
+    "ELSE",
+    "SWITCH",
+    "CASE",
+    "WHILE",
+    "FOR",
+    "DO",
+    "BREAK",
+    "CONTINUE",
+    "GOTO",
+    "IMPORT",
+    "ADD",
+    "SUB",
+    "TIMES",
+    "DIV",
+    "MOD",
+    "GEQ",
+    "GREATER",
+    "LEQ",
+    "LESS",
+    "EQUAL",
+    "NEQUAL",
+    "INC",
+    "DEC",
+    "BITAND",
+    "BITOR",
+    "BITXOR",
+    "LSHIFT",
+    "RSHIFT",
+    "COMPLE",
+    "ADDAGN",
+    "SUBAGN",
+    "TIMAGN",
+    "DIVAGN",
+    "MODAGN",
+    "LSHAGN",
+    "RSHAGN",
+    "BANDAGN",
+    "BXORAGN",
+    "BORAGN",
+    "AGN",
+    "QUES",
+    "LPAREN",
+    "RPAREN",
+    "LBRACK",
+    "RBRACK",
+    "LBRACE",
+    "RBRACE",
+    "COLON",
+    "SEMICOLON",
+    "COMMA",
+    "DOT",
+    "ID",
+    "NUM",
+    "REAL",
+    "CH",
+    "STRING"
 };
 
 C_string tokname(int tok)
 {
-    return tok < CHAR || tok > ID ? "BAD_TOKEN" : toknames[tok - 257];
+    return tok < 1 || tok > 400 ? "BAD_TOKEN" : toknames[tok - 257];
 }
 
 int main(int argc, char** argv)
@@ -52,8 +105,6 @@ int main(int argc, char** argv)
             break;
         }
         switch (tok) {
-        case EMPTY:
-            break;
         case ID:
             printf("%10s %s\n", tokname(tok), yylval.sval);
             break;

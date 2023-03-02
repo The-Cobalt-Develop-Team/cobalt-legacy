@@ -17,9 +17,10 @@
 */
 %{
 /*C Declarations*/
-#include "../include/tokens.h"
+// #include "../include/tokens.h"
 #include "../include/errormsg.h"
-#include "../../Parser/src/cobalt.tab.h"
+#include "../include/util.h"
+#include "cobalt.tab.h"
 /*#define ADJ (EM_tokpos=charPos, charPos+=yyleng)*/
 #define ADJ
 %}
@@ -27,33 +28,35 @@
 digits [0-9]+
 /*Regular Expressions and Actions*/
 %%
-" " {
-    ADJ;
-    return EMPTY;
-}
-\n {
-    ADJ;
-    return EMPTY;
-}
 char {
     ADJ;
-    return CHAR;
+    yylval.sval = C_String(yytext);
+    return BUILTINTYPE;
 }
 int {
     ADJ;
-    return INT;
+    yylval.sval = C_String(yytext);
+    return BUILTINTYPE;
 }
 float {
-    return FLOAT;
+    ADJ;
+    yylval.sval = C_String(yytext);
+    return BUILTINTYPE;
 }
 double {
-    return DOUBLE;
+    ADJ;
+    yylval.sval = C_String(yytext);
+    return BUILTINTYPE;
 }
 short {
-    return SHORT;
+    ADJ;
+    yylval.sval = C_String(yytext);
+    return BUILTINTYPE;
 }
 long {
-    return LONG;
+    ADJ;
+    yylval.sval = C_String(yytext);
+    return BUILTINTYPE;
 }
 if {
     ADJ;
