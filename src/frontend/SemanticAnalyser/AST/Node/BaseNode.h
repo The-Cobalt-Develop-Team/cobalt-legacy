@@ -20,10 +20,14 @@ struct ASTStmtNode : BaseASTNode {
 };
 
 struct ASTTypeNode : BaseASTNode {
-    explicit ASTTypeNode(char* loc)
+    ASTTypeNode(char* name_, char* loc)
         : BaseASTNode(loc)
+        , name(name_, strlen(name_))
     {
     }
+    [[nodiscard]] ASTNodeKind kind() const override { return NK_Type; }
+    void dump(std::ostream& os) const override { }
+    const std::string_view name;
 };
 
 struct ASTTypeDefinitionNode : BaseASTNode {
