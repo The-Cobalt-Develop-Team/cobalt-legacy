@@ -5,6 +5,165 @@
 
 namespace Cobalt {
 
+void ASTBinaryOpNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTBinaryOpNode")";
+    os << "\"lhs\":" << lhs << ",";
+    os << "\"operator\":" << '\"' << binaryOperatorToString(op) << "\",";
+    os << "\"rhs\":" << rhs;
+    os << "}";
+}
+
+void ASTUnaryOpNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTUnaryOpNode",)";
+    os << "\"expr\":" << expr << ",";
+    os << "\"operator\":" << '\"' << unaryOperatorToString(op) << "\",";
+    os << "}";
+}
+
+void ASTAssignNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTAssignNode",)";
+    os << "\"lhs\":" << lhs << ",";
+    os << "\"rhs\":" << rhs;
+    os << "}";
+}
+
+void ASTOpAssignNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTOpAssignNode",)";
+    os << "\"lhs\":" << lhs << ",";
+    os << "\"operator\":" << '\"' << binaryOperatorToString(op) << "\",";
+    os << "\"rhs\":" << rhs;
+    os << "}";
+}
+
+void ASTAddressNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTAddressNode",)";
+    os << "\"expr\":" << expr;
+    os << "}";
+}
+
+void ASTCondExprNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTCondExprNode",)";
+    os << "\"condition\":" << cond << ",";
+    os << "\"statement1\":" << stmt1 << ",";
+    os << "\"statement2\":" << stmt2 << ",";
+    os << "}";
+}
+
+void ASTFuncCallNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTFuncCallNode",)";
+    os << "\"name\":" << name << ",";
+    os << "\"parameters\":";
+    os << "[";
+    for (auto p : params)
+        os << (*p) << ",";
+    os << "]";
+    os << "}";
+}
+
+void ASTArraySubscriptNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTArraySubscriptNode",)";
+    os << "\"array\":" << array << ",";
+    os << "\"subscript\":" << subscript;
+    os << "}";
+}
+
+void ASTDereferenceNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTDereferenceNode",)";
+    os << "\"expr\":" << ptr;
+    os << "}";
+}
+
+void ASTMemberNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTMemberNode",)";
+    os << "\"obj\":" << obj << ",";
+    os << "\"member\":"
+       << "\"" << member << "\"";
+    os << "}";
+}
+
+void ASTPtrMemberNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTPtrMemberNode",)";
+    os << "\"obj\":" << obj << ",";
+    os << "\"member\":"
+       << "\"" << member << "\"";
+    os << "}";
+}
+
+void ASTVariableNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTVariableNode",)";
+    os << "\"name\""
+       << "\"" << name << "\"";
+    os << "}";
+}
+
+void ASTIntLiteralNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTIntLiteralNode",)";
+    os << "\"raw\":"
+       << "\"" << raw << "\"";
+    os << "}";
+}
+
+void ASTFloatLiteralNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTFloatLiteralNode",)";
+    os << "\"raw\":"
+       << "\"" << raw << "\"";
+    os << "}";
+}
+
+void ASTStringLiteralNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTStringLiteralNode",)";
+    os << "\"raw\":"
+       << "\"" << raw << "\"";
+    os << "}";
+}
+
+void ASTSizeofExprNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTSizeofExprNode",)";
+    os << "\"expr\":" << expr;
+    os << "}";
+}
+
+void ASTSizeofTypeNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTSizeofTypeNode",)";
+    os << "\"type\":" << type;
+    os << "}";
+}
+
+
 }
 
 extern "C" {

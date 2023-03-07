@@ -2,6 +2,49 @@
 #include "AST/ASTCApi.h"
 #include "AST/ASTNode.h"
 
+namespace Cobalt {
+
+void ASTTypedefNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTTypedefNode",)";
+    os << "\"type\":" << type << ",";
+    os << "\"name\":"
+       << "\"" << name << "\"";
+    os << "}";
+}
+
+void ASTStructDefNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTStructDefNode",)";
+    os << "\"name\":"
+       << "\"" << name << "\",";
+    os << "\"slots\":";
+    os << "[";
+    for (auto m : slots)
+        os << (*m) << ",";
+    os << "]";
+    os << "}";
+}
+
+void ASTUnionDefNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTUnionDefNode",)";
+    os << "\"name\":"
+       << "\"" << name << "\",";
+    os << "\"slots\":";
+    os << "[";
+    for (auto m : slots)
+        os << (*m) << ",";
+    os << "]";
+    os << "}";
+}
+
+
+}
+
 using namespace Cobalt;
 
 extern "C" {

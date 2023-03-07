@@ -18,7 +18,13 @@ private:
 
 public:
     [[nodiscard]] ASTNodeKind kind() const override { return NK_ASTRoot; }
-    void dump(std::ostream& os) const override { }
+    void dump(std::ostream& os) const override
+    {
+        os << "{";
+        for (auto p : children)
+            p->dump(os);
+        os << "}";
+    }
     std::vector<BaseASTNode*> children;
     static ASTASTRootNode* instance(bool reset = false)
     {

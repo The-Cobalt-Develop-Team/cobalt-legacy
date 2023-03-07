@@ -231,7 +231,7 @@ void* AST_ForConstructor(char* loc, void* init, void* cond, void* mod, void* bod
 /**
  * \brief Goto Node
  */
-void* AST_GotoConstructor(char* loc, void* label);
+void* AST_GotoConstructor(char* loc, char* label);
 
 /**
  * \brief Convert a Expr to an Stmt

@@ -3,6 +3,133 @@
 #include "AST/ASTNode.h"
 #include "AST/Node/BaseNode.h"
 
+namespace Cobalt {
+
+void ASTBlockNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTBlockNode",)";
+    os << R"("statements":)"
+       << "[";
+    for (auto p : stmts)
+        os << (*p) << ",";
+    os << "]";
+    os << "}";
+}
+
+void ASTBreakNode::dump(std::ostream& os) const
+{
+    os << R"({"nodeKind":"ASTBreakNode"})";
+}
+
+void ASTContinueNode::dump(std::ostream& os) const
+{
+    os << R"({"nodeKind":"ASTContinueNode"})";
+}
+
+void ASTCaseNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTCaseNode",)";
+    os << "\"label\":"
+       << "\"" << label << "\""
+       << ",";
+    os << "\"statements\":" << stmt;
+    os << "}";
+}
+
+void ASTDoWhileNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTDoWhileNode",)";
+    os << "\"condition\":" << cond << ",";
+    os << "\"statement\":" << stmt;
+    os << "}";
+}
+
+void ASTWhileNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTWhileNode",)";
+    os << "\"condition\":" << cond << ",";
+    os << "\"statement\":" << stmt;
+    os << "}";
+}
+
+void ASTForNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTForNode",)";
+    os << "\"initializer\":" << init << ",";
+    os << "\"condition\":" << cond << ",";
+    os << "\"modifier\":" << mod << ",";
+    os << "\"body\":" << body;
+    os << "}";
+}
+
+void ASTGotoNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTGotoNode",)";
+    os << "\"label\":"
+       << "\"" << label << "\"";
+    os << "}";
+}
+
+void ASTExprStmtNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTExprStmtNode",)";
+    os << "\"expr\":" << expr;
+    os << "}";
+}
+
+void ASTIfNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTIfNode",)";
+    os << "\"condition\":" << cond << ",";
+    os << "\"body\":" << body;
+    os << "}";
+}
+
+void ASTLabelNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTLabelNode",)";
+    os << "\"label\":"
+       << "\"" << name << "\"";
+    os << "}";
+}
+
+void ASTReturnNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTReturnNode",)";
+    os << "\"expr\":" << expr;
+    os << "}";
+}
+
+void ASTSwitchNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTSwitchNode",)";
+    os << "\"state\":" << state << ",";
+    os << "\"bodies\":";
+    os << "[";
+    for (auto c : bodies) {
+        os << "{";
+        os << "\"case\":"
+           << "\"" << c.first << "\",";
+        os << "\"body\":" << (*c.second);
+        os << "},";
+    }
+    os << "]";
+    os << "}";
+}
+
+}
+
 using namespace Cobalt;
 
 extern "C" {
@@ -48,9 +175,9 @@ void* AST_ForConstructor(char* loc, void* init, void* cond, void* mod, void* bod
     return new ASTForNode(*static_cast<ASTStmtNode*>(init), *static_cast<ASTExprNode*>(cond), *static_cast<ASTStmtNode*>(mod), *static_cast<ASTStmtNode*>(body), loc);
 }
 
-void* AST_GotoConstructor(char* loc, void* label)
+void* AST_GotoConstructor(char* loc, char* label)
 {
-    return new ASTGotoNode(*static_cast<ASTLabelNode*>(label), loc);
+    return new ASTGotoNode(label, loc);
 }
 
 void* AST_ExprStmtConstructor(char* loc, void* expr)
@@ -81,7 +208,7 @@ void* AST_SwitchConstructor(char* loc, void* expr)
 void* AST_AddSwitchCase(void* swit, void* cas)
 {
     auto ca = static_cast<ASTCaseNode*>(cas);
-    static_cast<ASTSwitchNode*>(swit)->bodys.emplace(ca->label, &(ca->stmt));
+    static_cast<ASTSwitchNode*>(swit)->bodies.emplace(ca->label, &(ca->stmt));
     return swit;
 }
 }

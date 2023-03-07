@@ -33,6 +33,12 @@ struct BaseASTNode {
     const std::string_view location; // const std::string location;
 };
 
+std::ostream& operator<<(std::ostream& os, const BaseASTNode& node)
+{
+    node.dump(os);
+    return os;
+}
+
 #define ADD_NODE_KIND(name) \
     struct AST##name##Node;
 #define END_NODE_KIND(name)
