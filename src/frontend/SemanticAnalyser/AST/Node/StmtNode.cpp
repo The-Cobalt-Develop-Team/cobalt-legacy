@@ -207,8 +207,9 @@ void* AST_SwitchConstructor(char* loc, void* expr)
 
 void* AST_AddSwitchCase(void* swit, void* cas)
 {
-    auto ca = static_cast<ASTCaseNode*>(cas);
-    static_cast<ASTSwitchNode*>(swit)->bodies.emplace(ca->label, &(ca->stmt));
+    // TODO: fix this
+    // auto ca = static_cast<ASTCaseNode*>(cas);
+    // static_cast<ASTSwitchNode*>(swit)->bodies.emplace(ca->label, &(ca->stmt));
     return swit;
 }
 }

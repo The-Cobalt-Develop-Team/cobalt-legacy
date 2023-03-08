@@ -33,7 +33,7 @@ struct BaseASTNode {
     const std::string_view location; // const std::string location;
 };
 
-std::ostream& operator<<(std::ostream& os, const BaseASTNode& node)
+inline std::ostream& operator<<(std::ostream& os, const BaseASTNode& node)
 {
     node.dump(os);
     return os;
