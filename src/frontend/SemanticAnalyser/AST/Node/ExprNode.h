@@ -5,8 +5,6 @@
 #include "AST/ASTNode.h"
 #include "AST/Node/BaseNode.h"
 
-#include "magic_enum.hpp"
-
 #include <cstring>
 #include <ostream>
 #include <string_view>
@@ -17,13 +15,7 @@ namespace Cobalt {
 struct ASTBinaryOpNode : ASTExprNode {
     using Operator = AST_BinaryOperatorType;
     [[nodiscard]] ASTNodeKind kind() const override { return NK_BinaryOp; }
-    void dump(std::ostream& os) const override
-    {
-        lhs.dump(os);
-        os << ' ' << magic_enum::enum_name(op) << ' ';
-        rhs.dump(os);
-        os << std::endl;
-    }
+    void dump(std::ostream& os) const override;
     ASTBinaryOpNode(ASTExprNode& lhs_, Operator op_, ASTExprNode& rhs_, char* loc)
         : ASTExprNode(loc)
         , lhs(lhs_)
@@ -35,18 +27,14 @@ struct ASTBinaryOpNode : ASTExprNode {
     const Operator op;
 };
 
+// TODO: Finish speclizer for LogicalOr and LogicalAnd
 struct ASTLogicalOrNode : ASTBinaryOpNode { };
 struct ASTLogicalAndNode : ASTBinaryOpNode { };
 
 struct ASTUnaryOpNode : ASTExprNode {
     using Operator = AST_UnaryOperatorType;
     [[nodiscard]] ASTNodeKind kind() const override { return NK_UnaryOp; }
-    void dump(std::ostream& os) const override
-    {
-        os << magic_enum::enum_name(op) << ' ';
-        expr.dump(os);
-        os << std::endl;
-    }
+    void dump(std::ostream& os) const override;
     ASTUnaryOpNode(ASTExprNode& expr_, Operator op_, char* loc)
         : ASTExprNode(loc)
         , expr(expr_)
@@ -66,12 +54,7 @@ struct ASTLHSNode : ASTExprNode {
 
 struct ASTAssignNode : ASTExprNode {
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Assign; }
-    void dump(std::ostream& os) const override
-    {
-        lhs.dump(os);
-        os << " = ";
-        rhs.dump(os);
-    }
+    void dump(std::ostream& os) const override;
     ASTAssignNode(ASTLHSNode& lhs_, ASTExprNode& rhs_, char* loc)
         : ASTExprNode(loc)
         , lhs(lhs_)
@@ -92,12 +75,7 @@ struct ASTOpAssignNode : ASTExprNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_OpAssign; }
-    void dump(std::ostream& os) const override
-    {
-        lhs.dump(os);
-        os << magic_enum::enum_name(op) << "= ";
-        rhs.dump(os);
-    }
+    void dump(std::ostream& os) const override;
     const ASTLHSNode& lhs;
     const Operator op;
     const ASTExprNode& rhs;
@@ -110,11 +88,7 @@ struct ASTAddressNode : ASTExprNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Address; }
-    void dump(std::ostream& os) const override
-    {
-        os << "&";
-        expr.dump(os);
-    }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& expr;
 };
 
@@ -127,14 +101,7 @@ struct ASTCondExprNode : ASTExprNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_CondExpr; }
-    void dump(std::ostream& os) const override
-    {
-        cond.dump(os);
-        os << "?";
-        stmt1.dump(os);
-        os << ":";
-        stmt2.dump(os);
-    }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& cond;
     const ASTStmtNode &stmt1, &stmt2;
 };
@@ -146,7 +113,7 @@ struct ASTFuncCallNode : ASTExprNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_FuncCall; }
-    void dump(std::ostream& os) const override { os << name; }
+    void dump(std::ostream& os) const override;
     const std::string_view name;
     std::vector<ASTFuncParameterNode*> params;
 };
@@ -159,11 +126,7 @@ struct ASTArraySubscriptNode : ASTLHSNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_ArraySubscript; }
-    void dump(std::ostream& os) const override
-    {
-        array.dump(os);
-        subscript.dump(os);
-    }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& array;
     const ASTExprNode& subscript;
 };
@@ -175,11 +138,7 @@ struct ASTDereferenceNode : ASTLHSNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Dereference; }
-    void dump(std::ostream& os) const override
-    {
-        os << "&";
-        ptr.dump(os);
-    }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& ptr;
 };
 
@@ -191,11 +150,7 @@ struct ASTMemberNode : ASTLHSNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Member; }
-    void dump(std::ostream& os) const override
-    {
-        obj.dump(os);
-        os << member;
-    }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& obj;
     const std::string_view member;
 };
@@ -208,11 +163,7 @@ struct ASTPtrMemberNode : ASTLHSNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Member; }
-    void dump(std::ostream& os) const override
-    {
-        obj.dump(os);
-        os << member;
-    }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& obj;
     const std::string_view member;
 };
@@ -224,7 +175,7 @@ struct ASTVariableNode : ASTLHSNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Variable; }
-    void dump(std::ostream& os) const override { os << name; }
+    void dump(std::ostream& os) const override;
     const std::string_view name;
 };
 
@@ -242,7 +193,7 @@ struct ASTIntLiteralNode : ASTLiteralNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_IntLiteral; }
-    void dump(std::ostream& os) const override { os << raw; }
+    void dump(std::ostream& os) const override;
     const std::string_view raw;
 };
 
@@ -253,7 +204,7 @@ struct ASTStringLiteralNode : ASTLiteralNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_StringLiteral; }
-    void dump(std::ostream& os) const override { os << raw; }
+    void dump(std::ostream& os) const override;
     const std::string_view raw;
 };
 
@@ -264,7 +215,7 @@ struct ASTFloatLiteralNode : ASTLiteralNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_FloatLiteral; }
-    void dump(std::ostream& os) const override { os << raw; }
+    void dump(std::ostream& os) const override;
     const std::string_view raw;
 };
 
@@ -275,7 +226,7 @@ struct ASTSizeofExprNode : ASTExprNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_SizeofExpr; }
-    void dump(std::ostream& os) const override { expr.dump(os); }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& expr;
 };
 
@@ -286,10 +237,11 @@ struct ASTSizeofTypeNode : ASTExprNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_SizeofType; }
-    void dump(std::ostream& os) const override { type.dump(os); }
+    void dump(std::ostream& os) const override;
     const ASTTypeNode& type;
 };
 
+// TODO: UnaryArithmeticOperators
 struct ASTUnaryArithmeticOpNode : ASTUnaryOpNode { };
 struct ASTPrefixOpNode : ASTUnaryArithmeticOpNode { };
 struct ASTSuffixOpNode : ASTUnaryArithmeticOpNode { };

@@ -20,11 +20,7 @@ struct ASTBlockNode : ASTStmtNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Block; }
-    void dump(std::ostream& os) const override
-    {
-        for (auto p : stmts)
-            p->dump(os);
-    }
+    void dump(std::ostream& os) const override;
     std::vector<ASTStmtNode*> stmts;
 };
 
@@ -34,7 +30,7 @@ struct ASTBreakNode : ASTStmtNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Break; }
-    void dump(std::ostream& os) const override { os << "BREAK"; }
+    void dump(std::ostream& os) const override;
 };
 
 struct ASTContinueNode : ASTStmtNode {
@@ -43,7 +39,7 @@ struct ASTContinueNode : ASTStmtNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Continue; }
-    void dump(std::ostream& os) const override { os << "CONTINUW"; }
+    void dump(std::ostream& os) const override;
 };
 
 struct ASTCaseNode : ASTStmtNode {
@@ -54,7 +50,7 @@ struct ASTCaseNode : ASTStmtNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Case; }
-    void dump(std::ostream& os) const override { os << "Case " << label; }
+    void dump(std::ostream& os) const override;
     const std::string_view label;
     const ASTStmtNode& stmt;
 };
@@ -67,13 +63,7 @@ struct ASTDoWhileNode : ASTStmtNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_DoWhile; }
-    void dump(std::ostream& os) const override
-    {
-        os << "Condition:";
-        cond.dump(os);
-        os << "Stmt:";
-        stmt.dump(os);
-    }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& cond;
     const ASTStmtNode& stmt;
 };
@@ -86,13 +76,7 @@ struct ASTWhileNode : ASTStmtNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_While; }
-    void dump(std::ostream& os) const override
-    {
-        os << "Condition:";
-        cond.dump(os);
-        os << "Stmt:";
-        stmt.dump(os);
-    }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& cond;
     const ASTStmtNode& stmt;
 };
@@ -107,13 +91,7 @@ struct ASTForNode : ASTStmtNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_For; }
-    void dump(std::ostream& os) const override
-    {
-        init.dump(os);
-        cond.dump(os);
-        mod.dump(os);
-        body.dump(os);
-    }
+    void dump(std::ostream& os) const override;
     const ASTStmtNode& init;
     const ASTExprNode& cond;
     const ASTStmtNode& mod;
@@ -121,14 +99,14 @@ struct ASTForNode : ASTStmtNode {
 };
 
 struct ASTGotoNode : ASTStmtNode {
-    ASTGotoNode(ASTLabelNode& label_, char* loc)
+    ASTGotoNode(char* label_, char* loc)
         : ASTStmtNode(loc)
-        , label(label_)
+        , label(label_, strlen(label_))
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Goto; }
-    void dump(std::ostream& os) const override { }
-    const ASTLabelNode& label;
+    void dump(std::ostream& os) const override;
+    const std::string_view label;
 };
 
 struct ASTExprStmtNode : ASTStmtNode {
@@ -138,7 +116,7 @@ struct ASTExprStmtNode : ASTStmtNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_ExprStmt; }
-    void dump(std::ostream& os) const override { }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& expr;
 };
 
@@ -150,7 +128,7 @@ struct ASTIfNode : ASTStmtNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_If; }
-    void dump(std::ostream& os) const override { }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& cond;
     const ASTStmtNode& body;
 };
@@ -162,7 +140,7 @@ struct ASTLabelNode : ASTStmtNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Label; }
-    void dump(std::ostream& os) const override { }
+    void dump(std::ostream& os) const override;
     const std::string_view name;
 };
 
@@ -173,7 +151,7 @@ struct ASTReturnNode : ASTStmtNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Return; }
-    void dump(std::ostream& os) const override { }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& expr;
 };
 
@@ -184,9 +162,9 @@ struct ASTSwitchNode : ASTStmtNode {
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Switch; }
-    void dump(std::ostream& os) const override { }
+    void dump(std::ostream& os) const override;
     const ASTExprNode& state;
-    std::unordered_map<std::string_view, ASTStmtNode*> bodys;
+    std::unordered_map<std::string_view, ASTStmtNode*> bodies;
 };
 
 }
