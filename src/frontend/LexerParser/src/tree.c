@@ -1,4 +1,4 @@
-/*This Program is **just for test**, DO NOT COMPILE IT IN RELEASE VERSION*/
+/* This Program is **just for test**, DO NOT COMPILE IT IN RELEASE VERSION */
 
 #include "../include/tree.h"
 
