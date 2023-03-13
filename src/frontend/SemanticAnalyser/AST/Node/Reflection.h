@@ -6,19 +6,19 @@
 
 namespace Cobalt {
 
-constexpr bool isExprNode(BaseASTNode* ptr)
+inline bool isExprNode(BaseASTNode* ptr)
 {
     auto k = ptr->kind();
     return static_cast<int>(NK_Expr) <= static_cast<int>(k) && static_cast<int>(k) < static_cast<int>(NK_Expr_END_TAG);
 }
 
-constexpr bool isStmtNode(BaseASTNode* ptr)
+inline bool isStmtNode(BaseASTNode* ptr)
 {
     auto k = ptr->kind();
     return static_cast<int>(NK_Stmt) <= static_cast<int>(k) && static_cast<int>(k) <= static_cast<int>(NK_Stmt_END_TAG);
 }
 
-constexpr const char* binaryOperatorToString(AST_BinaryOperatorType p)
+inline constexpr const char* binaryOperatorToString(AST_BinaryOperatorType p)
 {
     switch (p) {
     case AST_AddOp:
@@ -60,7 +60,7 @@ constexpr const char* binaryOperatorToString(AST_BinaryOperatorType p)
     }
 }
 
-constexpr const char* unaryOperatorToString(AST_UnaryOperatorType p)
+inline constexpr const char* unaryOperatorToString(AST_UnaryOperatorType p)
 {
     switch (p) {
     case AST_IncOp:

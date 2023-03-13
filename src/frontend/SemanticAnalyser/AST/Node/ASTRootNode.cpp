@@ -11,7 +11,7 @@ void* AST_ASTRootNodeConstructor()
 void* AST_AddASTRootNodeChildren(void* node)
 {
     auto ptr = Cobalt::ASTASTRootNode::instance();
-    ptr->children.emplace_back(node);
+    ptr->children.emplace_back(static_cast<Cobalt::BaseASTNode*>(node));
     return ptr;
 }
 }
