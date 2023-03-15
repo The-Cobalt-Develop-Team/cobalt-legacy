@@ -1,5 +1,5 @@
 /*
-    Error message implementation of the Cobalt Compiler
+    The header of Logger in the Cobalt Project's Logger
     Copyright (C) 2023  Andy Shen
 
     This program is free software: you can redistribute it and/or modify
@@ -15,22 +15,3 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "../include/errormsg.h"
-
-int EM_tokpos = 0;
-
-#define TEST 1
-
-/* The code below is only for TEST, DO NOT COMPILE IT INTO RELEASE VERSION */
-#if TEST
-
-void LOG_ERRORMSG(int pos, char* s)
-{
-    printf("Error:%d,%s", pos, s);
-}
-
-#else
-
-extern void LOG_ERRORMSG();
-
-#endif

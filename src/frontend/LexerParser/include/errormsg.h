@@ -17,5 +17,7 @@
 */
 #ifndef LP_ERRMSG_H
 #define LP_ERRMSG_H
-
+#include "util.h"
+extern void LOG_ERRORMSG(int pos, char* s);
+extern int EM_tokpos;
 #endif

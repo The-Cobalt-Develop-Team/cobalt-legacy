@@ -21,8 +21,8 @@
 #include "../include/errormsg.h"
 #include "../include/util.h"
 #include "cobalt.tab.h"
-/*#define ADJ (EM_tokpos=charPos, charPos+=yyleng)*/
-#define ADJ
+int charPos = 1;
+#define ADJ (EM_tokpos=charPos, charPos+=yyleng)
 %}
 /*Lex Definitions*/
 digits [0-9]+

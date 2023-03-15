@@ -1,5 +1,5 @@
 /*
-    Error message implementation of the Cobalt Compiler
+    The implementation of Logger Node in the Cobalt Project's Logger
     Copyright (C) 2023  Andy Shen
 
     This program is free software: you can redistribute it and/or modify
@@ -15,22 +15,31 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "../include/errormsg.h"
+#include "../include/LoggerNode.h"
 
-int EM_tokpos = 0;
-
-#define TEST 1
-
-/* The code below is only for TEST, DO NOT COMPILE IT INTO RELEASE VERSION */
-#if TEST
-
-void LOG_ERRORMSG(int pos, char* s)
+LogNode::LogNode(int level, const char* message)
 {
-    printf("Error:%d,%s", pos, s);
+    _type = Simple;
+    _level = level;
+    _parent = nullptr;
+    _message = message;
 }
 
-#else
+void LogNode::SpecifyParentNode(LogNode* parent)
+{
+    assert(_level != Root); // Root Node cannot be specified parent node
+    _parent = parent;
+    _type = Children;
+}
 
-extern void LOG_ERRORMSG();
+void LogNode::AddSubNode(LogNode* children)
+{
+    _children.emplace_back(children);
+}
 
-#endif
+void LogNode::AddSubNodes(std::initializer_list<LogNode*> children)
+{
+    for (auto it : children) {
+        AddSubNode(it);
+    }
+}

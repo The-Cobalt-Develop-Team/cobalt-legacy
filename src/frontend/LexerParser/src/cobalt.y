@@ -18,7 +18,9 @@
 %{
 #include <stdio.h>
 #include "../include/util.h"
+#include "../include/errormsg.h"
 #include "../include/tree.h"
+#include "../../SemanticAnalyser/AST/ASTCApi.h"
 // #include "../../SemanticAnalyser/AST/ASTCApi.h"
 
 extern int yylex(void);
@@ -30,9 +32,10 @@ int yywrap()
     return 1;
 }
 
-void yyerror(const char *s)
+void yyerror(char* ErrorMsg)
 {
-    printf("[error] %s\n",s);
+    // TODO: Using external Logger
+    LOG_ERRORMSG(EM_tokpos,ErrorMsg);
 }
 %}
 %union {int ival; double fval; char cval; C_string sval; void* vval;}
@@ -52,8 +55,19 @@ void yyerror(const char *s)
 %token <cval> CH
 %token <sval> STRING
 %right SEMICOLON
+%left COMMA
+%left ADDAGN SUBAGN TIMAGN DIVAGN MODAGN LSHAGN RSHAGN BANDAGN BXORAGN BORAGN AGN 
+%left QUES COLON
+%left BITOR
+%left BITXOR
+%left BITAND
+%left EQUAL NEQUAL
+%left GEQ GREATER LEQ LESS
+%left LSHIFT RSHIFT
 %left ADD SUB
-%left TIMES DIV
+%left TIMES DIV MOD
+%left COMPLE
+%left LPAREN RPAREN LBRACK RBRACK DOT INC DEC
 %type <vval> exp 
 %start prog
 %%
@@ -93,41 +107,41 @@ exp
     
 }
 | exp ADD exp {
-    $$ = addAddOp($1,$3);
-    /* $$ = AST_BinaryOpNodeConstructor($1, AST_AddOp, $3) */
+    /* $$ = addAddOp($1,$3);*/
+    // $$ = AST_BinaryOpNodeConstructor($1, AST_AddOp, $3);
 }
 | exp SUB exp {
-
+    // $$ = AST_BinaryOpNodeConstructor($1, AST_SubOp, $3);
 }
 | exp TIMES exp {
-
+    // $$ = AST_BinaryOpNodeConstructor($1, AST_TimesOp, $3);
 }
 | exp DIV exp {
-
+    // $$ = AST_BinaryOpNodeConstructor($1, AST_DivOp, $3);
 }
 | exp MOD exp {
-
+    // $$ = AST_BinaryOpNodeConstructor($1, AST_ModOp, $3);
 }
 | exp GEQ exp {
-
+    // $$ = AST_BinaryOpNodeConstructor($1, AST_GEQOp, $3);
 }
 | exp GREATER exp {
-
+    // $$ = AST_BinaryOpNodeConstructor($1, AST_GreaterOp, $3);
 }
 | exp LEQ exp {
-
+    // $$ = AST_BinaryOpNodeConstructor($1, AST_LEQOp, $3);
 }
 | exp LESS exp {
-
+    // $$ = AST_BinaryOpNodeConstructor($1, AST_LessOp, $3);
 }
 | exp EQUAL exp {
-
+    // $$ = AST_BinaryOpNodeConstructor($1, AST_EqualOp, $3);
 }
 | exp NEQUAL exp {
-
+    // $$ = AST_BinaryOpNodeConstructor($1, AST_NEqualOp, $3);
 }
 | INC exp {
-
+    // $$ = AST_UnaryOpNodeConstructor(char* loc, void* expr, AST_UnaryOperatorType op);
 }
 | DEC exp {
 
