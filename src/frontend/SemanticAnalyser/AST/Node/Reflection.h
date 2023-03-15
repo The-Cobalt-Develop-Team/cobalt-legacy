@@ -58,6 +58,7 @@ inline constexpr const char* binaryOperatorToString(AST_BinaryOperatorType p)
     case AST_LogicalOrOp:
         return "LogicalOrOp";
     }
+    return nullptr;
 }
 
 inline constexpr const char* unaryOperatorToString(AST_UnaryOperatorType p)
@@ -70,6 +71,7 @@ inline constexpr const char* unaryOperatorToString(AST_UnaryOperatorType p)
     case AST_CompleOp:
         return "CompleOp";
     }
+    return nullptr;
 }
 
 }

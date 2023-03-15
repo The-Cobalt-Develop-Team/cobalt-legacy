@@ -1,14 +1,17 @@
 #ifndef COBALT_SRC_FRONTEND_SEMANTICANALYSER_AST_ASTVISITOR_H_
 #define COBALT_SRC_FRONTEND_SEMANTICANALYSER_AST_ASTVISITOR_H_
 
-namespace Cobalt {
+#include "AST/ASTNode.h"
 
-struct BaseASTNode;
+namespace Cobalt {
 
 class BaseASTVisitor {
 public:
     virtual ~BaseASTVisitor() = default;
-    virtual void visit(BaseASTNode&);
+#define ADD_NODE_KIND(name) \
+    virtual void visit(AST##name##Node& node);
+#include "AST/Node/ASTNode.inc"
+#undef ADD_NODE_KIND
 };
 
 }

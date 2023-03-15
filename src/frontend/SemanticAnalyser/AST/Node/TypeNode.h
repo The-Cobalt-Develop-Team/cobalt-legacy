@@ -2,6 +2,7 @@
 #define COBALT_SRC_FRONTEND_SEMANTICANALYSER_AST_NODE_TYPENODE_H_
 
 #include "AST/ASTNode.h"
+#include "AST/ASTVisitor.h"
 #include "AST/Node/BaseNode.h"
 
 #include <cstring>
@@ -20,7 +21,8 @@ struct ASTTypedefNode : ASTTypeDefinitionNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Typedef; }
     void dump(std::ostream& os) const override;
-    const ASTTypeNode& type;
+    void visitNext(BaseASTVisitor& v) override { v.visit(type); }
+    ASTTypeNode& type;
     const std::string_view name;
 };
 
@@ -29,6 +31,11 @@ struct ASTCompositeTypeNode : ASTTypeDefinitionNode {
         : ASTTypeDefinitionNode(loc)
         , name(name_, strlen(name_))
     {
+    }
+    void visitNext(BaseASTVisitor& v) override
+    {
+        for (auto p : slots)
+            v.visit(*p);
     }
     const std::string_view name;
     std::vector<ASTSlotNode*> slots;
@@ -41,6 +48,7 @@ struct ASTStructDefNode : ASTCompositeTypeNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_StructDef; }
     void dump(std::ostream& os) const override;
+    void visitNext(BaseASTVisitor& v) override { }
 };
 
 struct ASTUnionDefNode : ASTCompositeTypeNode {

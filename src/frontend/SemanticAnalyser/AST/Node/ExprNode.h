@@ -23,7 +23,12 @@ struct ASTBinaryOpNode : ASTExprNode {
         , op(op_)
     {
     }
-    const ASTExprNode &lhs, &rhs;
+    void visitNext(BaseASTVisitor& v) override
+    {
+        v.visit(lhs);
+        v.visit(rhs);
+    }
+    ASTExprNode &lhs, &rhs;
     const Operator op;
 };
 
@@ -41,7 +46,8 @@ struct ASTUnaryOpNode : ASTExprNode {
         , op(op_)
     {
     }
-    const ASTExprNode& expr;
+    void visitNext(BaseASTVisitor& v) override { v.visit(expr); }
+    ASTExprNode& expr;
     const Operator op;
 };
 
@@ -52,23 +58,35 @@ struct ASTLHSNode : ASTExprNode {
     }
 };
 
-struct ASTAssignNode : ASTExprNode {
+struct ASTAbstractAssignNode : ASTExprNode {
+    explicit ASTAbstractAssignNode(char* loc)
+        : ASTExprNode(loc)
+    {
+    }
+};
+
+struct ASTAssignNode : ASTAbstractAssignNode {
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Assign; }
     void dump(std::ostream& os) const override;
     ASTAssignNode(ASTLHSNode& lhs_, ASTExprNode& rhs_, char* loc)
-        : ASTExprNode(loc)
+        : ASTAbstractAssignNode(loc)
         , lhs(lhs_)
         , rhs(rhs_)
     {
     }
-    const ASTLHSNode& lhs;
-    const ASTExprNode& rhs;
+    void visitNext(BaseASTVisitor& v) override
+    {
+        v.visit(lhs);
+        v.visit(rhs);
+    }
+    ASTLHSNode& lhs;
+    ASTExprNode& rhs;
 };
 
-struct ASTOpAssignNode : ASTExprNode {
+struct ASTOpAssignNode : ASTAbstractAssignNode {
     using Operator = AST_BinaryOperatorType;
     ASTOpAssignNode(ASTLHSNode& lhs_, Operator op_, ASTExprNode& rhs_, char* loc)
-        : ASTExprNode(loc)
+        : ASTAbstractAssignNode(loc)
         , lhs(lhs_)
         , op(op_)
         , rhs(rhs_)
@@ -76,9 +94,14 @@ struct ASTOpAssignNode : ASTExprNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_OpAssign; }
     void dump(std::ostream& os) const override;
-    const ASTLHSNode& lhs;
+    void visitNext(BaseASTVisitor& v) override
+    {
+        v.visit(lhs);
+        v.visit(rhs);
+    }
+    ASTLHSNode& lhs;
     const Operator op;
-    const ASTExprNode& rhs;
+    ASTExprNode& rhs;
 };
 
 struct ASTAddressNode : ASTExprNode {
@@ -89,7 +112,8 @@ struct ASTAddressNode : ASTExprNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Address; }
     void dump(std::ostream& os) const override;
-    const ASTExprNode& expr;
+    void visitNext(BaseASTVisitor& v) override { v.visit(expr); }
+    ASTExprNode& expr;
 };
 
 struct ASTCondExprNode : ASTExprNode {
@@ -102,8 +126,14 @@ struct ASTCondExprNode : ASTExprNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_CondExpr; }
     void dump(std::ostream& os) const override;
-    const ASTExprNode& cond;
-    const ASTStmtNode &stmt1, &stmt2;
+    void visitNext(BaseASTVisitor& v) override
+    {
+        v.visit(cond);
+        v.visit(stmt1);
+        v.visit(stmt2);
+    }
+    ASTExprNode& cond;
+    ASTStmtNode &stmt1, &stmt2;
 };
 
 struct ASTFuncCallNode : ASTExprNode {
@@ -114,6 +144,11 @@ struct ASTFuncCallNode : ASTExprNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_FuncCall; }
     void dump(std::ostream& os) const override;
+    void visitNext(BaseASTVisitor& v) override
+    {
+        for (auto p : params)
+            v.visit(*p);
+    }
     const std::string_view name;
     std::vector<ASTFuncParameterNode*> params;
 };
@@ -127,8 +162,13 @@ struct ASTArraySubscriptNode : ASTLHSNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_ArraySubscript; }
     void dump(std::ostream& os) const override;
-    const ASTExprNode& array;
-    const ASTExprNode& subscript;
+    void visitNext(BaseASTVisitor& v) override
+    {
+        v.visit(array);
+        v.visit(subscript);
+    }
+    ASTExprNode& array;
+    ASTExprNode& subscript;
 };
 
 struct ASTDereferenceNode : ASTLHSNode {
@@ -139,7 +179,8 @@ struct ASTDereferenceNode : ASTLHSNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Dereference; }
     void dump(std::ostream& os) const override;
-    const ASTExprNode& ptr;
+    void visitNext(BaseASTVisitor& v) override { v.visit(ptr); }
+    ASTExprNode& ptr;
 };
 
 struct ASTMemberNode : ASTLHSNode {
@@ -151,7 +192,8 @@ struct ASTMemberNode : ASTLHSNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Member; }
     void dump(std::ostream& os) const override;
-    const ASTExprNode& obj;
+    void visitNext(BaseASTVisitor& v) override { v.visit(obj); }
+    ASTExprNode& obj;
     const std::string_view member;
 };
 
@@ -164,7 +206,8 @@ struct ASTPtrMemberNode : ASTLHSNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Member; }
     void dump(std::ostream& os) const override;
-    const ASTExprNode& obj;
+    void visitNext(BaseASTVisitor& v) override { v.visit(obj); }
+    ASTExprNode& obj;
     const std::string_view member;
 };
 
@@ -172,11 +215,14 @@ struct ASTVariableNode : ASTLHSNode {
     ASTVariableNode(char* name_, char* loc)
         : ASTLHSNode(loc)
         , name(name_, strlen(name_))
+        , definition(nullptr)
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Variable; }
     void dump(std::ostream& os) const override;
+    void visitNext(BaseASTVisitor& v) override { }
     const std::string_view name;
+    ASTVariableDefinitionNode* definition;
 };
 
 struct ASTLiteralNode : ASTExprNode {
@@ -184,6 +230,7 @@ struct ASTLiteralNode : ASTExprNode {
         : ASTExprNode(loc)
     {
     }
+    void visitNext(BaseASTVisitor& v) override { }
 };
 
 struct ASTIntLiteralNode : ASTLiteralNode {
@@ -227,7 +274,8 @@ struct ASTSizeofExprNode : ASTExprNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_SizeofExpr; }
     void dump(std::ostream& os) const override;
-    const ASTExprNode& expr;
+    void visitNext(BaseASTVisitor& v) override { v.visit(expr); }
+    ASTExprNode& expr;
 };
 
 struct ASTSizeofTypeNode : ASTExprNode {
@@ -238,13 +286,17 @@ struct ASTSizeofTypeNode : ASTExprNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_SizeofType; }
     void dump(std::ostream& os) const override;
-    const ASTTypeNode& type;
+    void visitNext(BaseASTVisitor& v) override { v.visit(type); }
+    ASTTypeNode& type;
 };
 
 // TODO: UnaryArithmeticOperators
 struct ASTUnaryArithmeticOpNode : ASTUnaryOpNode { };
 struct ASTPrefixOpNode : ASTUnaryArithmeticOpNode { };
 struct ASTSuffixOpNode : ASTUnaryArithmeticOpNode { };
+
+// TODO: CastNode
+struct ASTCastNode : ASTExprNode { };
 
 }
 

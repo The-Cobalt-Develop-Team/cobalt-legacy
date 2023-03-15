@@ -2,6 +2,8 @@
 #define COBALT_SRC_FRONTEND_SEMANTICANALYSER_AST_NODE_BASENODE_H_
 
 #include "AST/ASTNode.h"
+#include "AST/ASTVisitor.h"
+
 #include <cstring>
 #include <ostream>
 #include <string_view>
@@ -26,6 +28,7 @@ struct ASTTypeNode : BaseASTNode {
     ASTTypeNode(char* name_, char* loc)
         : BaseASTNode(loc)
         , name(name_, strlen(name_))
+        , definition(nullptr)
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Type; }
@@ -37,7 +40,9 @@ struct ASTTypeNode : BaseASTNode {
            << '\"' << name << '\"';
         os << "}";
     }
+    void visitNext(BaseASTVisitor& v) override { }
     const std::string_view name;
+    ASTTypeDefinitionNode* definition;
 };
 
 struct ASTTypeDefinitionNode : BaseASTNode {
@@ -56,23 +61,9 @@ struct ASTFuncParameterNode : BaseASTNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_FuncParameter; }
     void dump(std::ostream& os) const override;
-    const ASTTypeNode& type;
+    void visitNext(BaseASTVisitor& v) override { v.visit(type); }
+    ASTTypeNode& type;
     const std::string_view name;
-};
-
-struct ASTVariableDefinitionNode : BaseASTNode {
-    ASTVariableDefinitionNode(ASTTypeNode& type_, char* name_, ASTExprNode& init_, char* loc)
-        : BaseASTNode(loc)
-        , type(type_)
-        , name(name_, strlen(name_))
-        , init(init_)
-    {
-    }
-    [[nodiscard]] ASTNodeKind kind() const override { return NK_VariableDefinition; }
-    void dump(std::ostream& os) const override;
-    const ASTTypeNode& type;
-    const std::string_view name;
-    const ASTExprNode& init;
 };
 
 struct ASTSlotNode : BaseASTNode {
@@ -84,7 +75,8 @@ struct ASTSlotNode : BaseASTNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Slot; }
     void dump(std::ostream& os) const override;
-    const ASTTypeNode& type;
+    void visitNext(BaseASTVisitor& v) override { v.visit(type); }
+    ASTTypeNode& type;
     const std::string_view name;
 };
 

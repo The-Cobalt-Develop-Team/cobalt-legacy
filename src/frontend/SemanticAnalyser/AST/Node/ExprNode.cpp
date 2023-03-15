@@ -115,7 +115,7 @@ void ASTVariableNode::dump(std::ostream& os) const
 {
     os << "{";
     os << R"("nodeKind":"ASTVariableNode",)";
-    os << "\"name\""
+    os << "\"name\":"
        << "\"" << name << "\"";
     os << "}";
 }
@@ -162,7 +162,6 @@ void ASTSizeofTypeNode::dump(std::ostream& os) const
     os << "\"type\":" << type;
     os << "}";
 }
-
 
 }
 

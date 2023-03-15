@@ -1,8 +1,8 @@
 #ifndef COBALT_SRC_FRONTEND_SEMANTICANALYSER_AST_NODE_STMTNODE_H_
 #define COBALT_SRC_FRONTEND_SEMANTICANALYSER_AST_NODE_STMTNODE_H_
 
-#include "AST/ASTCApi.h"
 #include "AST/ASTNode.h"
+#include "AST/ASTVisitor.h"
 #include "AST/Node/BaseNode.h"
 
 #include <cstring>
@@ -21,6 +21,7 @@ struct ASTBlockNode : ASTStmtNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Block; }
     void dump(std::ostream& os) const override;
+    void visitNext(BaseASTVisitor& v) override;
     std::vector<ASTStmtNode*> stmts;
 };
 
@@ -31,6 +32,7 @@ struct ASTBreakNode : ASTStmtNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Break; }
     void dump(std::ostream& os) const override;
+    void visitNext(BaseASTVisitor&) override { }
 };
 
 struct ASTContinueNode : ASTStmtNode {
@@ -40,8 +42,10 @@ struct ASTContinueNode : ASTStmtNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Continue; }
     void dump(std::ostream& os) const override;
+    void visitNext(BaseASTVisitor&) override { }
 };
 
+// TODO: Redesign Switch and Case
 struct ASTCaseNode : ASTStmtNode {
     explicit ASTCaseNode(char* name, ASTStmtNode& stmt_, char* loc)
         : ASTStmtNode(loc)
@@ -52,7 +56,8 @@ struct ASTCaseNode : ASTStmtNode {
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Case; }
     void dump(std::ostream& os) const override;
     const std::string_view label;
-    const ASTStmtNode& stmt;
+    ASTStmtNode& stmt;
+    void visitNext(BaseASTVisitor& v) override { }
 };
 
 struct ASTDoWhileNode : ASTStmtNode {
@@ -64,8 +69,13 @@ struct ASTDoWhileNode : ASTStmtNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_DoWhile; }
     void dump(std::ostream& os) const override;
-    const ASTExprNode& cond;
-    const ASTStmtNode& stmt;
+    void visitNext(BaseASTVisitor& v) override
+    {
+        v.visit(cond);
+        v.visit(stmt);
+    }
+    ASTExprNode& cond;
+    ASTStmtNode& stmt;
 };
 
 struct ASTWhileNode : ASTStmtNode {
@@ -77,8 +87,13 @@ struct ASTWhileNode : ASTStmtNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_While; }
     void dump(std::ostream& os) const override;
-    const ASTExprNode& cond;
-    const ASTStmtNode& stmt;
+    void visitNext(BaseASTVisitor& v) override
+    {
+        v.visit(cond);
+        v.visit(stmt);
+    }
+    ASTExprNode& cond;
+    ASTStmtNode& stmt;
 };
 
 struct ASTForNode : ASTStmtNode {
@@ -92,10 +107,17 @@ struct ASTForNode : ASTStmtNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_For; }
     void dump(std::ostream& os) const override;
-    const ASTStmtNode& init;
-    const ASTExprNode& cond;
-    const ASTStmtNode& mod;
-    const ASTStmtNode& body;
+    void visitNext(BaseASTVisitor& v) override
+    {
+        v.visit(init);
+        v.visit(cond);
+        v.visit(mod);
+        v.visit(body);
+    }
+    ASTStmtNode& init;
+    ASTExprNode& cond;
+    ASTStmtNode& mod;
+    ASTStmtNode& body;
 };
 
 struct ASTGotoNode : ASTStmtNode {
@@ -106,6 +128,7 @@ struct ASTGotoNode : ASTStmtNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Goto; }
     void dump(std::ostream& os) const override;
+    void visitNext(BaseASTVisitor& v) override { }
     const std::string_view label;
 };
 
@@ -117,7 +140,8 @@ struct ASTExprStmtNode : ASTStmtNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_ExprStmt; }
     void dump(std::ostream& os) const override;
-    const ASTExprNode& expr;
+    void visitNext(BaseASTVisitor& v) override;
+    ASTExprNode& expr;
 };
 
 struct ASTIfNode : ASTStmtNode {
@@ -129,8 +153,13 @@ struct ASTIfNode : ASTStmtNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_If; }
     void dump(std::ostream& os) const override;
-    const ASTExprNode& cond;
-    const ASTStmtNode& body;
+    void visitNext(BaseASTVisitor& v) override
+    {
+        v.visit(cond);
+        v.visit(body);
+    }
+    ASTExprNode& cond;
+    ASTStmtNode& body;
 };
 
 struct ASTLabelNode : ASTStmtNode {
@@ -141,6 +170,7 @@ struct ASTLabelNode : ASTStmtNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Label; }
     void dump(std::ostream& os) const override;
+    void visitNext(BaseASTVisitor& v) override { }
     const std::string_view name;
 };
 
@@ -152,9 +182,11 @@ struct ASTReturnNode : ASTStmtNode {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Return; }
     void dump(std::ostream& os) const override;
-    const ASTExprNode& expr;
+    void visitNext(BaseASTVisitor& v) override { v.visit(expr); }
+    ASTExprNode& expr;
 };
 
+// TODO: Redesign
 struct ASTSwitchNode : ASTStmtNode {
     ASTSwitchNode(ASTExprNode& state_, char* loc)
         : ASTStmtNode(loc)
@@ -165,6 +197,27 @@ struct ASTSwitchNode : ASTStmtNode {
     void dump(std::ostream& os) const override;
     const ASTExprNode& state;
     std::unordered_map<std::string_view, ASTStmtNode*> bodies;
+    void visitNext(BaseASTVisitor& v) override { }
+};
+
+struct ASTVariableDefinitionNode : ASTStmtNode {
+    ASTVariableDefinitionNode(char* type_, char* name_, ASTExprNode* init_, char* loc)
+        : ASTStmtNode(loc)
+        , type(type_, strlen(type_))
+        , name(name_, strlen(name_))
+        , init(init_)
+    {
+    }
+    [[nodiscard]] ASTNodeKind kind() const override { return NK_VariableDefinition; }
+    void dump(std::ostream& os) const override;
+    void visitNext(BaseASTVisitor& v) override
+    {
+        if (init)
+            v.visit(*init);
+    }
+    const std::string_view type;
+    const std::string_view name;
+    ASTExprNode* init;
 };
 
 }

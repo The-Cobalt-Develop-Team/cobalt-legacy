@@ -1,9 +1,18 @@
 #include "AST/Node/StmtNode.h"
+
 #include "AST/ASTCApi.h"
 #include "AST/ASTNode.h"
 #include "AST/Node/BaseNode.h"
+#include "AST/Node/ExprNode.h"
 
 namespace Cobalt {
+
+void ASTBlockNode::visitNext(BaseASTVisitor& v)
+{
+    for (auto p : stmts) {
+        v.visit(*p);
+    }
+}
 
 void ASTBlockNode::dump(std::ostream& os) const
 {
@@ -84,6 +93,11 @@ void ASTExprStmtNode::dump(std::ostream& os) const
     os << "}";
 }
 
+void ASTExprStmtNode::visitNext(BaseASTVisitor& v)
+{
+    v.visit(expr);
+}
+
 void ASTIfNode::dump(std::ostream& os) const
 {
     os << "{";
@@ -125,6 +139,17 @@ void ASTSwitchNode::dump(std::ostream& os) const
         os << "},";
     }
     os << "]";
+    os << "}";
+}
+
+void ASTVariableDefinitionNode::dump(std::ostream& os) const
+{
+    os << "{";
+    os << R"("nodeKind":"ASTVariableDefinitionNode",)";
+    os << "\"type\":" << type << ",";
+    os << "\"name\":"
+       << "\"" << name << "\",";
+    os << "\"initializer\":" << init;
     os << "}";
 }
 
@@ -211,5 +236,14 @@ void* AST_AddSwitchCase(void* swit, void* cas)
     // auto ca = static_cast<ASTCaseNode*>(cas);
     // static_cast<ASTSwitchNode*>(swit)->bodies.emplace(ca->label, &(ca->stmt));
     return swit;
+}
+
+void* AST_VariableDefinitionConstructor(char* loc, char* type, char* name, void* initializer)
+{
+    auto init = static_cast<Cobalt::ASTExprNode*>(initializer);
+    if (!initializer) {
+        // TODO: default initializer
+    }
+    return new Cobalt::ASTVariableDefinitionNode(type, name, init, loc);
 }
 }
