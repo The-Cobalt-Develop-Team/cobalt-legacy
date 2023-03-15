@@ -2,6 +2,7 @@
 #define COBALT_SRC_FRONTEND_SEMANTICANALYSER_AST_NODE_ASTROOTNODE_H_
 
 #include "AST/ASTNode.h"
+#include "AST/ASTVisitor.h"
 
 #include <cstddef>
 #include <ostream>
@@ -25,6 +26,7 @@ public:
             p->dump(os);
         os << "}";
     }
+    void visitNext(BaseASTVisitor& v) override { v.visit(*this); }
     std::vector<BaseASTNode*> children;
     static ASTASTRootNode* instance(bool reset = false)
     {

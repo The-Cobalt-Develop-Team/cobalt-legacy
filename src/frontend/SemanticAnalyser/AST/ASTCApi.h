@@ -6,13 +6,6 @@ extern "C" {
 #endif
 
 /**
- * \brief construct a None node which can explicitly convert to any ASTNode
- * \return Pointer to the Node
- * \retval NULL Construct failed
- */
-void* AST_NoneNodeConstructor(char* loc);
-
-/**
  * \brief Constructor of ASTRootNode. It will only construct once
  * \return Pointer to the Node
  * \retval NULL Construct failed
@@ -101,7 +94,7 @@ void* AST_UnaryOpNodeConstructor(char* loc, void* expr, AST_UnaryOperatorType op
 void* AST_CastNodeConstructor(char* loc, void* type, void* expr);
 
 /**
- * \brief Construct Condition Expr node e.g. a?b:
+ * \brief Construct Condition Expr node e.g. a?b:c
  */
 void* AST_CondExprNodeConstructor(char* loc, void* condition, void* statement_a, void* statement_b);
 
@@ -111,6 +104,7 @@ void* AST_CondExprNodeConstructor(char* loc, void* condition, void* statement_a,
  */
 void* AST_FuncCallNodeConstructor(char* loc, char* func);
 
+// TODO: exprnode
 /**
  * \brief Add Parameter of FuncCall Node
  */
@@ -160,7 +154,7 @@ void* AST_StringLiteralConstructor(char* loc, char* raw);
  * \brief Constructor of FloatLiteral
  * \param raw raw string of the float literal
  */
-void* AST_FloatListralConstructor(char* loc, char* raw);
+void* AST_FloatLiteralConstructor(char* loc, char* raw);
 
 /**
  * \brief Constructor of Sizeof
@@ -181,7 +175,7 @@ void* AST_SlotConstructor(char* loc, void* type, char* name);
  * \param name name of the variable
  * \param initializer ExprNode which initialize the variable while NULL means default
  */
-void* AST_VariableDefinitionConstructor(char* loc, void* type, char* name, void* initializer);
+void* AST_VariableDefinitionConstructor(char* loc, char* type, char* name, void* initializer);
 
 /**
  * \brief Constructor of FuncParameter
