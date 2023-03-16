@@ -1,5 +1,5 @@
 /*
-    The implementation of Logger Node in the Cobalt Project's Logger
+    The implementation of Logger Node in the Lithium Project
     Copyright (C) 2023  Andy Shen
 
     This program is free software: you can redistribute it and/or modify
@@ -15,26 +15,41 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
 #include "../include/LoggerNode.h"
 
-LogNode::LogNode(int level, const char* message)
+using namespace Lithium::Logger;
+
+// Constructor Functions
+LogNode::LogNode(int level, std::string message)
 {
     _type = Simple;
     _level = level;
     _parent = nullptr;
-    _message = message;
+    _message = std::move(message);
 }
 
+LogNode::LogNode(std::string LoggerName)
+{
+    _type = Root;
+    _level = RootLevel;
+    _parent = nullptr;
+    _logger_name = std::move(LoggerName);
+}
+
+// Specify relation Functions
 void LogNode::SpecifyParentNode(LogNode* parent)
 {
     assert(_level != Root); // Root Node cannot be specified parent node
-    _parent = parent;
     _type = Children;
+    _parent = parent;
+    _logger_name = parent->_logger_name;
 }
 
 void LogNode::AddSubNode(LogNode* children)
 {
     _children.emplace_back(children);
+    children->_logger_name = this->_logger_name;
 }
 
 void LogNode::AddSubNodes(std::initializer_list<LogNode*> children)
@@ -42,4 +57,22 @@ void LogNode::AddSubNodes(std::initializer_list<LogNode*> children)
     for (auto it : children) {
         AddSubNode(it);
     }
+}
+
+// Return information Functions
+inline int LogNode::type() const
+{
+    return _type;
+}
+inline int LogNode::level() const
+{
+    return _level;
+}
+inline std::string LogNode::message() const
+{
+    return _message;
+}
+inline std::string LogNode::logger_name() const
+{
+    return _logger_name;
 }
