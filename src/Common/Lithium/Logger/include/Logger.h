@@ -48,6 +48,11 @@ namespace Logger {
 
     public:
         BareLogger() = default;
+        virtual ~BareLogger()
+        {
+            for (auto p : _container)
+                delete p;
+        }
         explicit BareLogger(std::string LoggerName);
         void debug(std::string message);
         void info(std::string message);
