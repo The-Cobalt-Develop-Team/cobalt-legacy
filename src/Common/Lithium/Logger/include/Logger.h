@@ -16,11 +16,18 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef LITHIUM_LOGGER_H
+#define LITHIUM_LOGGER_H
 #include "LoggerNode.h"
 #include <string>
 #include <utility>
+
+#define DEBUG_FLAG 1
+
+#if DEBUG_FLAG
+#include <iostream>
+#endif
+
 namespace Lithium {
 namespace Logger {
     class LogTree : LogNode {
@@ -37,36 +44,59 @@ namespace Logger {
     class BareLogger {
     protected:
         std::string _logger_name;
-        std::vector<LogNode> _container;
+        std::vector<LogNode*> _container;
 
     public:
         BareLogger() = default;
         explicit BareLogger(std::string LoggerName);
-        inline void debug(std::string message);
-        inline void info(std::string message);
-        inline void warn(std::string message);
-        inline void error(std::string message);
-        inline void fatal(std::string message);
-        inline void addLog(LogNode Log);
+        void debug(std::string message);
+        void info(std::string message);
+        void warn(std::string message);
+        void error(std::string message);
+        void fatal(std::string message);
+        void addLog(const LogNode& Log);
+        std::vector<LogNode*> returnContain() const
+        {
+            return _container;
+        }
     };
 
-    class Logger : BareLogger {
-    private:
+    class Logger : public BareLogger {
     public:
         Logger() = default;
         explicit Logger(std::string LoggerName);
     };
 
-    class {
-    private:
-        std::vector<BareLogger*> _container;
+    //     class LogSystem {
+    //     private:
+    //         static LogSystem instance;
 
-    public:
-        void addLogger(BareLogger* logger)
-        {
-            _container.emplace_back(logger);
-        }
-    } LogSystem; // It is a singleton,to process all Loggers
+    //     private:
+    //         std::vector<BareLogger*> _container;
+    //         LogSystem();
+    //         ~LogSystem();
+
+    //     public:
+    //         static LogSystem& getInstance()
+    //         {
+    //             return instance;
+    //         }
+
+    //         void addLogger(BareLogger* logger)
+    //         {
+    //             _container.push_back(logger);
+    //             std::cerr << _container.size() << std::endl;
+    //         }
+    //         std::vector<BareLogger*> returnContain()
+    //         {
+    //             return _container;
+    //         }
+    //         auto returnSize()
+    //         {
+    //             return _container.size();
+    //         }
+    //     }; // It is a singleton,to process all Loggers
+    //     LogSystem LogSystem::instance;
 }
 }
 #endif

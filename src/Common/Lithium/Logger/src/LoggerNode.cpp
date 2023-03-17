@@ -29,14 +29,6 @@ LogNode::LogNode(int level, std::string message)
     _message = std::move(message);
 }
 
-LogNode::LogNode(std::string LoggerName)
-{
-    _type = Root;
-    _level = RootLevel;
-    _parent = nullptr;
-    _logger_name = std::move(LoggerName);
-}
-
 // Specify relation Functions
 void LogNode::SpecifyParentNode(LogNode* parent)
 {
@@ -60,19 +52,19 @@ void LogNode::AddSubNodes(std::initializer_list<LogNode*> children)
 }
 
 // Return information Functions
-inline int LogNode::type() const
+int LogNode::type() const
 {
     return _type;
 }
-inline int LogNode::level() const
+int LogNode::level() const
 {
     return _level;
 }
-inline std::string LogNode::message() const
+std::string LogNode::message() const
 {
     return _message;
 }
-inline std::string LogNode::logger_name() const
+std::string LogNode::logger_name() const
 {
     return _logger_name;
 }

@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef LOGGER_NODE_H
-#define LOGGER_NODE_H
+#ifndef LITHIUM_LOGGER_NODE_H
+#define LITHIUM_LOGGER_NODE_H
 #include <cassert>
 #include <cstring>
 #include <string>
@@ -39,7 +39,7 @@ namespace Logger {
         FATAL,
     };
     class LogNode {
-    private:
+    protected:
         int _type {};
         int _level {};
         LogNode* _parent {};
@@ -51,7 +51,9 @@ namespace Logger {
         // Constructor Functions
         LogNode() = default;
         LogNode(int level, std::string message);
-        explicit LogNode(std::string LoggerName);
+
+        // Operator Functions
+        LogNode& operator=(const LogNode& rhs) = default;
 
         // Specify relation Functions
         inline void SpecifyParentNode(LogNode* parent);
@@ -59,10 +61,10 @@ namespace Logger {
         inline void AddSubNodes(std::initializer_list<LogNode*> children);
 
         // Return information Functions
-        inline int type() const;
-        inline int level() const;
-        inline std::string message() const;
-        inline std::string logger_name() const;
+        int type() const;
+        int level() const;
+        std::string message() const;
+        std::string logger_name() const;
 
         // Interface
         friend void RecursiveOperate(); // Reserve an interface

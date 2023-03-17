@@ -1,0 +1,1 @@
+clang++ test.cpp ../Logger/src/Logger.cpp ../Logger/src/LoggerNode.cpp -o test.out -Wall -v
