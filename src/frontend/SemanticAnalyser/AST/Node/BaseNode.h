@@ -46,10 +46,15 @@ struct ASTTypeNode : BaseASTNode {
 };
 
 struct ASTTypeDefinitionNode : BaseASTNode {
-    explicit ASTTypeDefinitionNode(char* loc)
+    explicit ASTTypeDefinitionNode(char* name_, char* loc)
         : BaseASTNode(loc)
+        , name(name_)
     {
     }
+    [[nodiscard]] ASTNodeKind kind() const override { return NK_TypeDefinition; }
+    void dump(std::ostream& os) const override;
+    void visitNext(BaseASTVisitor& v) override { }
+    const std::string_view name;
 };
 
 struct ASTFuncParameterNode : BaseASTNode {
@@ -62,6 +67,7 @@ struct ASTFuncParameterNode : BaseASTNode {
     [[nodiscard]] ASTNodeKind kind() const override { return NK_FuncParameter; }
     void dump(std::ostream& os) const override;
     void visitNext(BaseASTVisitor& v) override { v.visit(type); }
+    ~ASTFuncParameterNode() override { delete &type; }
     ASTTypeNode& type;
     const std::string_view name;
 };

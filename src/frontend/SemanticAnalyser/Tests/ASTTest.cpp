@@ -19,4 +19,5 @@ TEST(ASTBuildTest, ExprNodeReflectionTest1)
     auto node = static_cast<BaseASTNode*>(AST_BinaryOpNodeConstructor(kTestLocation, lhs_, AST_AddOp, rhs_));
     ASSERT_EQ(std::string_view(raw1), lhs_->raw);
     ASSERT_TRUE(isExprNode(node));
+    delete node;
 }

@@ -14,22 +14,20 @@ namespace Cobalt {
 
 struct ASTTypedefNode : ASTTypeDefinitionNode {
     ASTTypedefNode(ASTTypeNode& type_, char* name_, char* loc)
-        : ASTTypeDefinitionNode(loc)
+        : ASTTypeDefinitionNode(name_, loc)
         , type(type_)
-        , name(name_, strlen(name_))
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Typedef; }
     void dump(std::ostream& os) const override;
     void visitNext(BaseASTVisitor& v) override { v.visit(type); }
+    ~ASTTypedefNode() override { delete &type; }
     ASTTypeNode& type;
-    const std::string_view name;
 };
 
 struct ASTCompositeTypeNode : ASTTypeDefinitionNode {
     ASTCompositeTypeNode(char* name_, char* loc)
-        : ASTTypeDefinitionNode(loc)
-        , name(name_, strlen(name_))
+        : ASTTypeDefinitionNode(name_, loc)
     {
     }
     void visitNext(BaseASTVisitor& v) override
@@ -37,7 +35,11 @@ struct ASTCompositeTypeNode : ASTTypeDefinitionNode {
         for (auto p : slots)
             v.visit(*p);
     }
-    const std::string_view name;
+    ~ASTCompositeTypeNode() override
+    {
+        for (auto p : slots)
+            delete p;
+    }
     std::vector<ASTSlotNode*> slots;
 };
 

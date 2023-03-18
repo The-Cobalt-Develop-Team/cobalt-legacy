@@ -104,7 +104,6 @@ void* AST_CondExprNodeConstructor(char* loc, void* condition, void* statement_a,
  */
 void* AST_FuncCallNodeConstructor(char* loc, char* func);
 
-// TODO: exprnode
 /**
  * \brief Add Parameter of FuncCall Node
  */
