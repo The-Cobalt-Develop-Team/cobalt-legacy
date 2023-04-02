@@ -25,12 +25,13 @@
 namespace Lithium {
 namespace Logger {
     // Enumeration structs
-    enum Type {
+    enum Type_Enum {
         Root,
         Children,
         Simple,
     };
-    enum Level {
+
+    enum Level_Enum {
         RootLevel,
         DEBUG,
         INFO,
@@ -38,6 +39,7 @@ namespace Logger {
         ERROR,
         FATAL,
     };
+
     class LogNode {
     protected:
         int _type {};
@@ -51,6 +53,14 @@ namespace Logger {
         // Constructor Functions
         LogNode() = default;
         LogNode(int level, std::string message);
+
+        // Destructor Functions
+        virtual ~LogNode()
+        {
+            for (auto p : _children) {
+                delete p;
+            }
+        }
 
         // Operator Functions
         LogNode& operator=(const LogNode& rhs) = default;
@@ -69,7 +79,7 @@ namespace Logger {
         // Interface
         friend void RecursiveOperate(); // Reserve an interface
     };
-}
-}
+} // namespace Logger
+} // namespace Lithium
 
 #endif

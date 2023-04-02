@@ -23,3 +23,8 @@ target("cobalt-semantic-analyser-test")
     add_deps("cobalt-semantic-analyser")
     add_links("gtest", "gtest_main")
 
+-- target("cobalt-lexer-parser")
+--     set_kind("static")
+--     set_languages("cxx17")
+--     add_includedirs("LexerParser/include")
+--     add_files("LexerParser/*.c")

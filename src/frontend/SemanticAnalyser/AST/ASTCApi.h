@@ -204,7 +204,7 @@ void* AST_ContinueNodeConstructor(char* loc);
 /**
  * \brief Case Node
  */
-void* AST_CaseNodeConstructor(char* loc, char* label,void* stmt);
+void* AST_CaseNodeConstructor(char* loc, char* label, void* stmt);
 
 /**
  * \brief DoWhile Node
@@ -285,6 +285,8 @@ void* AST_TypedefConstructor(char* loc, void* type, char* name);
  * \brief Type Node
  */
 void* AST_TypeConstructor(char* loc, char* name);
+
+// TODO: Add Import statement
 
 #ifdef __cplusplus
 }
