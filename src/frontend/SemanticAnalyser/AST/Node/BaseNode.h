@@ -24,25 +24,22 @@ struct ASTStmtNode : BaseASTNode {
     }
 };
 
+// TODO: Redesign Type system
 struct ASTTypeNode : BaseASTNode {
-    ASTTypeNode(char* name_, char* loc)
+    explicit ASTTypeNode(char* loc)
         : BaseASTNode(loc)
-        , name(name_, strlen(name_))
-        , definition(nullptr)
     {
     }
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Type; }
-    void dump(std::ostream& os) const override
-    {
-        os << "{";
-        os << R"("nodeKind":"ASTTypeNode",)";
-        os << "\"type\": "
-           << '\"' << name << '\"';
-        os << "}";
-    }
+    // void dump(std::ostream& os) const override
+    // {
+    //     os << "{";
+    //     os << R"("nodeKind":"ASTTypeNode",)";
+    //     os << "\"type\": "
+    //        << '\"' << name << '\"';
+    //     os << "}";
+    // }
     void visitNext(BaseASTVisitor& v) override { }
-    const std::string_view name;
-    ASTTypeDefinitionNode* definition;
 };
 
 struct ASTTypeDefinitionNode : BaseASTNode {

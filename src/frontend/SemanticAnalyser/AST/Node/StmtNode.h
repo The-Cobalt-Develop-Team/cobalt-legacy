@@ -162,6 +162,7 @@ struct ASTExprStmtNode : ASTStmtNode {
     ASTExprNode& expr;
 };
 
+// TODO: else / else if node
 struct ASTIfNode : ASTStmtNode {
     ASTIfNode(ASTExprNode& cond_, ASTStmtNode& body_, char* loc)
         : ASTStmtNode(loc)

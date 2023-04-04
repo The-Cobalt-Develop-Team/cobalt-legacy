@@ -42,17 +42,11 @@ void ASTUnionDefNode::dump(std::ostream& os) const
     os << "}";
 }
 
-
 }
 
 using namespace Cobalt;
 
 extern "C" {
-
-void* AST_TypeConstructor(char* loc, char* name)
-{
-    return new ASTTypeNode(name, loc);
-}
 
 void* AST_StructDefConstructor(char* loc, char* name)
 {
@@ -74,5 +68,10 @@ void* AST_AddUnionSlot(void* strc, void* slot)
 {
     static_cast<ASTUnionDefNode*>(strc)->slots.emplace_back(static_cast<ASTSlotNode*>(slot));
     return strc;
+}
+
+void* AST_SimpleTypeConstructor(char* loc, char* name)
+{
+    return new ASTSimpleTypeNode(name, loc);
 }
 }

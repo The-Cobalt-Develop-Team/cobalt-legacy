@@ -276,15 +276,30 @@ void* AST_UnionDefConstructor(char* loc, char* name);
  */
 void* AST_AddUnionSlot(void* strc, void* slot);
 
+typedef enum {
+    BT_CHAR,
+    BT_SHORT,
+    BT_INT,
+    BT_LONG,
+    BT_SIGNED,
+    BT_UNSIGNED,
+    BT_BYTE
+} AST_BuiltinType;
+
 /**
  * \brief TypedefNode
  */
 void* AST_TypedefConstructor(char* loc, void* type, char* name);
 
-/**
- * \brief Type Node
- */
-void* AST_TypeConstructor(char* loc, char* name);
+void* AST_SimpleTypeConstructor(char* loc, char* name);
+
+void* AST_FunctionSignatureConstructor(char* loc, void* res_type);
+
+void* AST_AddFunctionSignatureParameterType(void* sign, void* param);
+
+void* AST_ComplexTypeConstructor(char* loc, char* name);
+
+void* AST_AddComplexParameterType(void* comp, void* param);
 
 // TODO: Add Import statement
 
