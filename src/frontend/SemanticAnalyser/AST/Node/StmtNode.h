@@ -22,6 +22,11 @@ struct ASTBlockNode : ASTStmtNode {
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Block; }
     void dump(std::ostream& os) const override;
     void visitNext(BaseASTVisitor& v) override;
+    ~ASTBlockNode() override
+    {
+        for (auto p : stmts)
+            delete p;
+    }
     std::vector<ASTStmtNode*> stmts;
 };
 
@@ -74,6 +79,11 @@ struct ASTDoWhileNode : ASTStmtNode {
         v.visit(cond);
         v.visit(stmt);
     }
+    ~ASTDoWhileNode() override
+    {
+        delete &cond;
+        delete &stmt;
+    }
     ASTExprNode& cond;
     ASTStmtNode& stmt;
 };
@@ -114,6 +124,13 @@ struct ASTForNode : ASTStmtNode {
         v.visit(mod);
         v.visit(body);
     }
+    ~ASTForNode() override
+    {
+        delete &init;
+        delete &cond;
+        delete &mod;
+        delete &body;
+    }
     ASTStmtNode& init;
     ASTExprNode& cond;
     ASTStmtNode& mod;
@@ -141,9 +158,11 @@ struct ASTExprStmtNode : ASTStmtNode {
     [[nodiscard]] ASTNodeKind kind() const override { return NK_ExprStmt; }
     void dump(std::ostream& os) const override;
     void visitNext(BaseASTVisitor& v) override;
+    ~ASTExprStmtNode() override { delete &expr; }
     ASTExprNode& expr;
 };
 
+// TODO: else / else if node
 struct ASTIfNode : ASTStmtNode {
     ASTIfNode(ASTExprNode& cond_, ASTStmtNode& body_, char* loc)
         : ASTStmtNode(loc)
@@ -157,6 +176,11 @@ struct ASTIfNode : ASTStmtNode {
     {
         v.visit(cond);
         v.visit(body);
+    }
+    ~ASTIfNode() override
+    {
+        delete &cond;
+        delete &body;
     }
     ASTExprNode& cond;
     ASTStmtNode& body;
@@ -183,6 +207,7 @@ struct ASTReturnNode : ASTStmtNode {
     [[nodiscard]] ASTNodeKind kind() const override { return NK_Return; }
     void dump(std::ostream& os) const override;
     void visitNext(BaseASTVisitor& v) override { v.visit(expr); }
+    ~ASTReturnNode() override { delete &expr; }
     ASTExprNode& expr;
 };
 
@@ -215,6 +240,7 @@ struct ASTVariableDefinitionNode : ASTStmtNode {
         if (init)
             v.visit(*init);
     }
+    ~ASTVariableDefinitionNode() override { delete init; }
     const std::string_view type;
     const std::string_view name;
     ASTExprNode* init;

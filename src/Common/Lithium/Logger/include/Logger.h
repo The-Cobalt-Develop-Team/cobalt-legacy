@@ -50,8 +50,9 @@ namespace Logger {
         BareLogger() = default;
         virtual ~BareLogger()
         {
-            for (auto p : _container)
+            for (auto p : _container) {
                 delete p;
+            }
         }
         explicit BareLogger(std::string LoggerName);
         void debug(std::string message);
@@ -102,6 +103,11 @@ namespace Logger {
     //         }
     //     }; // It is a singleton,to process all Loggers
     //     LogSystem LogSystem::instance;
+
+    static const char* Builtin_Type_String[] = { "Root", "Children", "Simple" };
+
+    static const char* Builtin_Level_String[] = { "Unknown", "DEBUG", "INFO", "WARN", "ERROR", "FATAL" };
 }
 }
+
 #endif

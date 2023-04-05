@@ -77,7 +77,7 @@ stm
 : stm SEMICOLON stm
 | stm SEMICOLON
 | IMPORT ID {
-    printf("import identifier,%s\n",$2);
+    // printf("import identifier,%s\n",$2);
 };
 | ID AGN exp {   /* Assign a valuable */
     printf("Identifier:%s, assign to %d\n",$1,$3);
@@ -108,66 +108,67 @@ exp
 }
 | exp ADD exp {
     /* $$ = addAddOp($1,$3);*/
-    // $$ = AST_BinaryOpNodeConstructor($1, AST_AddOp, $3);
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_AddOp, $3);
 }
 | exp SUB exp {
-    // $$ = AST_BinaryOpNodeConstructor($1, AST_SubOp, $3);
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_SubOp, $3);
 }
 | exp TIMES exp {
-    // $$ = AST_BinaryOpNodeConstructor($1, AST_TimesOp, $3);
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_TimesOp, $3);
 }
 | exp DIV exp {
-    // $$ = AST_BinaryOpNodeConstructor($1, AST_DivOp, $3);
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_DivOp, $3);
 }
 | exp MOD exp {
-    // $$ = AST_BinaryOpNodeConstructor($1, AST_ModOp, $3);
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_ModOp, $3);
 }
 | exp GEQ exp {
-    // $$ = AST_BinaryOpNodeConstructor($1, AST_GEQOp, $3);
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_GEQOp, $3);
 }
 | exp GREATER exp {
-    // $$ = AST_BinaryOpNodeConstructor($1, AST_GreaterOp, $3);
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_GreaterOp, $3);
 }
 | exp LEQ exp {
-    // $$ = AST_BinaryOpNodeConstructor($1, AST_LEQOp, $3);
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_LEQOp, $3);
 }
 | exp LESS exp {
-    // $$ = AST_BinaryOpNodeConstructor($1, AST_LessOp, $3);
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_LessOp, $3);
 }
 | exp EQUAL exp {
-    // $$ = AST_BinaryOpNodeConstructor($1, AST_EqualOp, $3);
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_EqualOp, $3);
 }
 | exp NEQUAL exp {
-    // $$ = AST_BinaryOpNodeConstructor($1, AST_NEqualOp, $3);
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_NEqualOp, $3);
 }
 | INC exp {
-    // $$ = AST_UnaryOpNodeConstructor(char* loc, void* expr, AST_UnaryOperatorType op);
+    $$ = AST_UnaryOpNodeConstructor(EM_tokpos, $2, AST_IncOp);
 }
 | DEC exp {
-
+    $$ = AST_UnaryOpNodeConstructor(EM_tokpos, $2, AST_DecOp);
 }
 | exp INC {
-
+    $$ = AST_UnaryOpNodeConstructor(EM_tokpos, $2, AST_IncOp);
 }
 | exp DEC {
-
-}
-| exp BITAND exp {
-
-}
-| exp BITOR exp {
-    
-}
-| exp BITXOR exp {
-    
-}
-| exp LSHIFT exp {
-    
-}
-| exp RSHIFT exp {
-    
+    $$ = AST_UnaryOpNodeConstructor(EM_tokpos, $2, AST_DecOp);
 }
 | COMPLE exp {
-
+    $$ = AST_UnaryOpNodeConstructor(EM_tokpos, $2, AST_CompleOp);
 }
+| exp BITAND exp {
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_BitAndOp, $3);
+}
+| exp BITOR exp {
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_BitOrOp, $3);
+}
+| exp BITXOR exp {
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_BitXorOp, $3);
+}
+| exp LSHIFT exp {
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_LShiftOp, $3);
+}
+| exp RSHIFT exp {
+    $$ = AST_BinaryOpNodeConstructor(EM_tokpos,$1, AST_RShiftOp, $3);
+}
+
 %%
